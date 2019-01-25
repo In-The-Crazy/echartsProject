@@ -21,7 +21,7 @@
     <script src="<%=root%>/js/jquery/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
     <script src="<%=root%>/js/jquery/plugins/jquery.form.js" type="text/javascript"></script>
     <script src="<%=root%>/js/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
-    <link rel="shortcut icon" type="image/x-icon" href="<%=root%>/images/shandongair.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="<%=root%>/images/redlogo.png" />
     <script src="<%=root%>/js/common/custom.js" type="text/javascript"></script>
     <script src="<%=root%>/js/common/validator.js" type="text/javascript"></script>
     <script src="<%=root%>/js/ECharts/3.7.1/echarts.min.js"></script>
