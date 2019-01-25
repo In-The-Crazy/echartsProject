@@ -280,7 +280,8 @@ function initCharts(queryType) {
 			toolbox: {
 				feature: {
 					saveAsImage: {}
-				}
+				},
+				right:20
 			},
 			xAxis: {
 				type: 'category',
@@ -362,7 +363,8 @@ function initCharts(queryType) {
 			toolbox: {
 				feature: {
 					saveAsImage: {}
-				}
+				},
+				right:20
 			},
 			xAxis: {
 				type: 'category',
@@ -478,7 +480,8 @@ function initCharts(queryType) {
 			toolbox: {
 				feature: {
 					saveAsImage: {}
-				}
+				},
+				right:20
 			},
 			xAxis: {
 				type: 'category',
