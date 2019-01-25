@@ -153,7 +153,7 @@ function ajaxTree() {
 
 /** --------加载图表数据 ------ */
 function initCharts(queryType) {
-	var firstChart = echarts.init(document.getElementById('firstChart'),'roma1');
+	var firstChart = echarts.init(document.getElementById('firstChart'),'roma');
 	var secondChart = echarts.init(document.getElementById('secondChart'),'roma');
 	var thirdChart = echarts.init(document.getElementById('thirdChart'),'roma');
 	var firstOption;
