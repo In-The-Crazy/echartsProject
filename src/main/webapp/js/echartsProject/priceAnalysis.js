@@ -7,10 +7,10 @@ $(function() {
 	// 加载树型
 	ajaxTree();
 	// 加载图表数据
-	initCharts(1);
-	initCharts(2);
-	initCharts(3);
-
+	initCharts(1,false);
+	initCharts(2,false);
+	initCharts(3,false);
+	initCharts(4,false);
 });
 
 
@@ -42,6 +42,18 @@ function initPage() {
 		width : 250
 	});
 	$("#thirdFightNumber").textbox({
+		label : '航班号：',
+		labelWidth : 100,
+		labelAlign : 'right',
+		width : 250
+	});
+	$("#fourthFightNumberOne").textbox({
+		label : '航班号：',
+		labelWidth : 100,
+		labelAlign : 'right',
+		width : 250
+	});
+	$("#fourthFightNumberTwo").textbox({
 		label : '航班号：',
 		labelWidth : 100,
 		labelAlign : 'right',
@@ -116,6 +128,43 @@ function initDatebox() {
 		}
 	});
 
+	$('#fourthstartTime').datebox({
+		label : '查询开始时间：',
+		labelWidth : 100,
+		labelAlign : 'right',
+		width : 250,
+		value : daysAgoTemp,
+		editable : false,
+		required : false
+	});
+	$('#fourthendTime').datebox({
+		label : '查询结束时间：',
+		labelWidth : 100,
+		labelAlign : 'right',
+		width : 250,
+		value : todayTemp,
+		editable : false,
+		required : false
+	});
+	$('#fourthstartTime').datebox().datebox('calendar').calendar({
+		validator: function(date){
+			var d1 = new Date(daysAgo.getFullYear(), daysAgo.getMonth(), daysAgo.getDate());
+			var temp = new Date(daysAgo.getTime()+6*24*60*60*1000);
+			var d2 = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
+			return d2>=date && date>=d1;
+		}
+	});
+
+	$('#fourthendTime').datebox().datebox('calendar').calendar({
+		validator: function(date){
+			var now = new Date();
+			var d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+			var temp = new Date(now.getTime()-6*24*60*60*1000);
+			var d2 = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
+			return d2<=date && date<=d1;
+		}
+	});
+
 }
 
 /**
@@ -148,66 +197,210 @@ function ajaxTree() {
 		multiple : false,
 		limitToList : true
 	});
+
+	$('#fourthHour').combobox({
+		label : '小时：',
+		labelWidth : 100,
+		labelAlign : "right",
+		data : [{
+			"id" : "00",
+			"text" : "00",
+			"selected" : true
+		},{
+			"id" : "01",
+			"text" : "01"
+		},{
+			"id" : "02",
+			"text" : "02"
+		},{
+			"id" : "03",
+			"text" : "03"
+		},{
+			"id" : "04",
+			"text" : "04"
+		},{
+			"id" : "05",
+			"text" : "05"
+		},{
+			"id" : "06",
+			"text" : "06"
+		},{
+			"id" : "07",
+			"text" : "07"
+		},{
+			"id" : "08",
+			"text" : "08"
+		},{
+			"id" : "09",
+			"text" : "09"
+		},{
+			"id" : "10",
+			"text" : "10"
+		},{
+			"id" : "11",
+			"text" : "11"
+		},{
+			"id" : "12",
+			"text" : "12"
+		},{
+			"id" : "13",
+			"text" : "13"
+		},{
+			"id" : "14",
+			"text" : "14"
+		},{
+			"id" : "15",
+			"text" : "15"
+		},{
+			"id" : "16",
+			"text" : "16"
+		},{
+			"id" : "17",
+			"text" : "17"
+		},{
+			"id" : "18",
+			"text" : "18"
+		},{
+			"id" : "19",
+			"text" : "19"
+		},{
+			"id" : "20",
+			"text" : "20"
+		},{
+			"id" : "21",
+			"text" : "21"
+		},{
+			"id" : "22",
+			"text" : "22"
+		},{
+			"id" : "23",
+			"text" : "23"
+		}],
+		valueField : 'id',
+		textField:'text',
+		width : 250,
+		required : true,
+		editable : false,
+		multiple : false,
+		limitToList : true
+	});
+	$('#fourthMin').combobox({
+		label : '分钟：',
+		labelWidth : 100,
+		labelAlign : "right",
+		data : [{
+			"id" : "00",
+			"text" : "00",
+			"selected" : true
+		},{
+			"id" : "05",
+			"text" : "05"
+		},{
+			"id" : "10",
+			"text" : "10"
+		},{
+			"id" : "15",
+			"text" : "15"
+		},{
+			"id" : "20",
+			"text" : "20"
+		},{
+			"id" : "25",
+			"text" : "25"
+		},{
+			"id" : "30",
+			"text" : "30"
+		},{
+			"id" : "35",
+			"text" : "35"
+		},{
+			"id" : "4040"
+		},{
+			"id" : "45",
+			"text" : "45"
+		},{
+			"id" : "50",
+			"text" : "50"
+		},{
+			"id" : "55",
+			"text" : "55"
+		}],
+		valueField : 'id',
+		textField:'text',
+		width : 250,
+		required : true,
+		editable : false,
+		multiple : false,
+		limitToList : true
+	});
 }
 
 
 /** --------加载图表数据 ------ */
-function initCharts(queryType) {
+function initCharts(queryType,flag) {
 	var firstChart = echarts.init(document.getElementById('firstChart'),'roma');
 	var secondChart = echarts.init(document.getElementById('secondChart'),'roma');
 	var thirdChart = echarts.init(document.getElementById('thirdChart'),'roma');
+	var fourthChart = echarts.init(document.getElementById('fourthChart'),'roma');
 	var firstOption;
 	var secondOption;
+	var thirdOption;
+	var fourthOption;
 	var start =0;
 	var end =100;
 	var sendData = {};
 	sendData.fromCity=$('#fromCity').val();
 	sendData.arriveCity=$('#arriveCity').val();
-	sendData.takeOffTime=$('#takeOffTime').datebox('getValue');;
+	sendData.takeOffTime=$('#takeOffTime').datebox('getValue');
 	sendData.intervalTime=$('#intervalTime').combobox('getValue');
 	sendData.firstFightNumber=$('#firstFightNumber').val();
 	sendData.secondFightNumber=$('#secondFightNumber').val();
 	sendData.thirdFightNumber=$('#thirdFightNumber').val();
-	sendData.startTime=$('#startTime').datebox('getValue');;
-	sendData.endTime=$('#endTime').datebox('getValue');;
-
+	sendData.startTime=$('#startTime').datebox('getValue');
+	sendData.endTime=$('#endTime').datebox('getValue');
+	sendData.fourthFightNumberOne=$('#fourthFightNumberOne').val();
+	sendData.fourthFightNumberTwo=$('#fourthFightNumberTwo').val();
+	sendData.fourthstartTime=$('#fourthstartTime').datebox('getValue');
+	sendData.fourthendTime=$('#fourthendTime').datebox('getValue');
+	sendData.dateTime = $('#fourthHour').combobox('getValue')+":"+$('#fourthMin').combobox('getValue');
 	if(queryType==1){
 		sendData.queryType = '1';
 		var firstLegendArray = [];
 		var firstxArray = [];
 		var firstSeriesArray = [];
-		$.ajax({
-			type : 'post',
-			async : false,
-			url : root + '/mainSrv',
-			dataType :'json',
-			data: sendData,
-			success : function(data) {
-				if (data != "-1") {
-					var num = 0;
-					for (var key in data) {
-						firstLegendArray.push(key);
-						var dataList = data[key];
-						var showData = {};
-						showData.name = key;
-						showData.type = 'line';
-						showData.data = [];
-						showData.zws = [];
-						for (var i = 0; i < dataList.length; i++) {
-							var item = dataList[i].split(",");
-							if(num==0){
-								firstxArray.push(item[0]);
+		if(flag){
+			$.ajax({
+				type : 'post',
+				async : false,
+				url : root + '/mainSrv/queryChartOne',
+				dataType :'json',
+				data: sendData,
+				success : function(data) {
+					if (data != "-1") {
+						var num = 0;
+						for (var key in data) {
+							firstLegendArray.push(key);
+							var dataList = data[key];
+							var showData = {};
+							showData.name = key;
+							showData.type = 'line';
+							showData.data = [];
+							showData.zws = [];
+							for (var i = 0; i < dataList.length; i++) {
+								var item = dataList[i].split(",");
+								if(num==0){
+									firstxArray.push(item[0]);
+								}
+								showData.data.push(item[2]);
+								showData.zws.push(item[0]+'-'+item[3])
 							}
-							showData.data.push(item[2]);
-							showData.zws.push(item[0]+'-'+item[3])
+							firstSeriesArray.push(showData);
+							num++;
 						}
-						firstSeriesArray.push(showData);
-						num++;
 					}
 				}
-			}
-		});
-
+			});
+		}
 		firstOption = {
 			dataZoom : [
 				{
@@ -310,24 +503,26 @@ function initCharts(queryType) {
 		secondShowData.type='line';
 		secondShowData.data=[];
 		sendData.queryType = '2';
-		$.ajax({
-			type : 'post',
-			async : false,
-			url : root + '/mainSrv',
-			dataType :'json',
-			data: sendData,
-			success : function(data) {
-				if (data!=-1){
-					for (var i=0;i<data.length;i++){
-						var item = data[i].split(",");
-						secondxArray.push(item[0]);
-						secondShowData.data.push(item[1]);
+		if(flag) {
+			$.ajax({
+				type: 'post',
+				async: false,
+				url: root + '/mainSrv/queryChartOne',
+				dataType: 'json',
+				data: sendData,
+				success: function (data) {
+					if (data != -1) {
+						for (var i = 0; i < data.length; i++) {
+							var item = data[i].split(",");
+							secondxArray.push(item[0]);
+							secondShowData.data.push(item[1]);
+						}
 					}
-				}
 
-			}
-		});
-		secondSeriesArray.push(secondShowData);
+				}
+			});
+			secondSeriesArray.push(secondShowData);
+		}
 
 		secondOption = {
 			dataZoom : [
@@ -390,42 +585,44 @@ function initCharts(queryType) {
 		var thirdxArray = [];
 		var thirdSeriesArray = [];
 		sendData.queryType = '3';
-		$.ajax({
-			type: 'post',
-			async: false,
-			url: root + '/mainSrv',
-			dataType: 'json',
-			data: sendData,
-			success: function (data) {
-				if (data != -1) {
-					var thirdShowData = {};
-					thirdShowData.name='价格';
-					thirdShowData.type='line';
-					thirdShowData.data=[];
-					thirdShowData.zws=[];
-					var num = 1;
-					var keys = [];
-					for (var key in data) {
-						keys.push(key);
-					}
-					keys.sort(compareDate);
-					for (var k=0;k<keys.length;k++) {
-						var date = keys[k].substring(5).replace("-","/");
-						var dataList = data[keys[k]];
-						for (var i = 0; i < dataList.length; i++) {
-							var item = dataList[i].split(",");
-							thirdxArray.push(date+' '+item[0]);
-							thirdShowData.data.push(item[2]);
-							thirdShowData.zws.push(date+' '+item[0]+'-'+item[3])
+		if(flag) {
+			$.ajax({
+				type: 'post',
+				async: false,
+				url: root + '/mainSrv/queryChartOne',
+				dataType: 'json',
+				data: sendData,
+				success: function (data) {
+					if (data != -1) {
+						var thirdShowData = {};
+						thirdShowData.name = '价格';
+						thirdShowData.type = 'line';
+						thirdShowData.data = [];
+						thirdShowData.zws = [];
+						var num = 1;
+						var keys = [];
+						for (var key in data) {
+							keys.push(key);
 						}
-						num++;
+						keys.sort(compareDate);
+						for (var k = 0; k < keys.length; k++) {
+							var date = keys[k].substring(5).replace("-", "/");
+							var dataList = data[keys[k]];
+							for (var i = 0; i < dataList.length; i++) {
+								var item = dataList[i].split(",");
+								thirdxArray.push(date + ' ' + item[0]);
+								thirdShowData.data.push(item[2]);
+								thirdShowData.zws.push(date + ' ' + item[0] + '-' + item[3])
+							}
+							num++;
+						}
+						thirdSeriesArray.push(thirdShowData);
 					}
-					thirdSeriesArray.push(thirdShowData);
-				}
 
-			}
-		});
-		var thirdOption = {
+				}
+			});
+		}
+		thirdOption = {
 			dataZoom : [
 				{
 					type: 'slider',
@@ -501,12 +698,127 @@ function initCharts(queryType) {
 		};
 		thirdChart.setOption(thirdOption);
 
+	} else if(queryType==4){
+		sendData.queryType = '4';
+		var fourthLegendArray = [];
+		var fourthxArray = [];
+		var fourthSeriesArray = [];
+		if(flag) {
+			$.ajax({
+				type: 'post',
+				async: false,
+				url: root + '/mainSrv/queryChartOne',
+				dataType: 'json',
+				data: sendData,
+				success: function (data) {
+					if (data != "-1") {
+						var num = 0;
+						for (var key in data) {
+							fourthLegendArray.push(key);
+							var dataList = data[key];
+							var showData = {};
+							showData.name = key;
+							showData.type = 'line';
+							showData.data = [];
+							showData.zws = [];
+							for (var i = 0; i < dataList.length; i++) {
+								var item = dataList[i].split(",");
+								//if (item[1]!=null && item[1]!='' && item[1]!='null'){
+									if (num == 0) {
+										fourthxArray.push(item[0].substring(5).replace("-", "/"));
+									}
+									showData.data.push(item[2]);
+									showData.zws.push(item[0].substring(5).replace("-", "/") + '-' + item[3])
+								//}
+
+							}
+							fourthSeriesArray.push(showData);
+							num++;
+						}
+					}
+				}
+			});
+		}
+		fourthOption = {
+			dataZoom : [
+				{
+					type: 'slider',
+					show: true,
+					start: start,
+					end: end,
+					handleSize: 8
+				},
+				{
+					type: 'inside',
+					start: start,
+					end: end
+				}
+			],
+			title: {
+				text: '航班价格'
+			},
+			tooltip: {
+				/*trigger: 'axis',*/
+				trigger: 'item',
+				formatter:function(params){//数据格式
+					var info =params.name+"</br>";
+					info +="航班号："+params.seriesName+"&nbsp;&nbsp;价格："+params.value;
+					for(var k=0;k<fourthSeriesArray.length;k++){
+						if(params.seriesName == fourthSeriesArray[k].name){
+							for(var j=0;j<fourthSeriesArray[k].zws.length;j++){
+								var item = fourthSeriesArray[k].zws[j].split("-");
+								if(item[0] == params.name) {
+									info +="&nbsp;&nbsp;座位数："+ item[1];
+								}
+
+							}
+						}
+
+					}
+					info+="</br>";
+					return info;
+				}
+			},
+			legend: {
+				data:fourthLegendArray
+			},
+			grid: {
+				left: '3%',
+				right: '4%',
+				bottom: '3%',
+				containLabel: true
+			},
+			toolbox: {
+				feature: {
+					saveAsImage: {}
+				},
+				right:20
+			},
+			xAxis: {
+				type: 'category',
+				boundaryGap: false,
+				data: fourthxArray
+			},
+			yAxis: {
+				type: 'value',
+				min: function(value) {
+					return value.min/2;
+				},
+				max: function(value) {
+					return value.max + value.min/2;
+				}
+			},
+			series: fourthSeriesArray
+		};
+		fourthChart.setOption(fourthOption);
 	}
 
 	window.onresize = function () {
 		firstChart.resize();
 		secondChart.resize();
 		thirdChart.resize();
+		fourthChart.resize();
+
 	}
 }
 

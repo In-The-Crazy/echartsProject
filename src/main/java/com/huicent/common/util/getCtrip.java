@@ -35,6 +35,18 @@ import com.huicent.travel.util.RedisUtil;
  */
 public class getCtrip {
 
+	/**
+	 *
+	 *TODO(方法的作用/映射)查询多个航班
+	 * @Title: getFight
+	 * @param dcity
+	 * @param acity
+	 * @param fightDate
+	 * @param minute
+	 * @return
+	 * 创建日期：2019年1月28日 上午10:36:04
+	 * @author 杨祖彧
+	 */
 	public String getFight(String dcity, String acity, String fightDate, String minute) {
 		String currentDate = HcDateUtil.getCurrentDate(HcDateUtil.yyyyMMdd10);
 		Jedis jedis = null;
@@ -81,6 +93,19 @@ public class getCtrip {
 		return json.toString();
 	}
 
+	/**
+	 *TODO(方法的作用/映射)查询两个航班之间价格对比
+	 * @Title: priceBetween
+	 * @param dcity
+	 * @param acity
+	 * @param fightDate
+	 * @param fNumber1
+	 * @param fNumber2
+	 * @param minute
+	 * @return
+	 * 创建日期：2019年1月28日 上午10:36:52
+	 * @author 杨祖彧
+	 */
 	public String priceBetween(String dcity, String acity,
 							   String fightDate, String fNumber1, String fNumber2, String minute) {
 		String currentDate = HcDateUtil.getCurrentDate(HcDateUtil.yyyyMMdd10);
@@ -160,6 +185,22 @@ public class getCtrip {
 		return json.toString();
 	}
 
+	/**
+	 *
+	 *TODO(方法的作用/映射)查询单个航班多天
+	 * @Title: flightDate
+	 * @param dcity
+	 * @param acity
+	 * @param flightDate
+	 * @param minute
+	 * @param flightNumber
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 * @throws ParseException
+	 * 创建日期：2019年1月28日 上午10:37:48
+	 * @author 杨祖彧
+	 */
 	public String flightDate(String dcity, String acity, String flightDate, String minute, String flightNumber, String startDate, String endDate) throws ParseException{
 		Jedis jedis = null;
 		jedis = RedisUtil.getJedis();
@@ -172,7 +213,7 @@ public class getCtrip {
 		}else if("60".equals(minute)){
 			min = 12;
 		}
-		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-mm-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
 		java.util.Date udate = sdf.parse(startDate);
 		boolean flag = false;
 		long dateLong = udate.getTime();
@@ -216,6 +257,63 @@ public class getCtrip {
 		return json.toString();
 	}
 
+	public String flightDateTime(String dcity, String acity, String flightDate, String minute, String flightNumber1, String flightNumber2, String startDate, String endDate, String dateTime) throws ParseException{
+		Jedis jedis = null;
+		jedis = RedisUtil.getJedis();
+		Map map = new HashMap();
+		int min = 1;
+		if("10".equals(minute)){
+			min = 2;
+		}else if("30".equals(minute)){
+			min = 6;
+		}else if("60".equals(minute)){
+			min = 12;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+		java.util.Date udate = sdf.parse(startDate);
+		boolean flag = false;
+		long dateLong = udate.getTime();
+		List<String> listKeys1 = new ArrayList<String>();
+		for(int i = 0;i <= 30 ;i++){
+			java.sql.Date sdate = new java.sql.Date(dateLong);
+			String rDate = sdate.toString();
+			if(flag){
+				break;
+			}
+			if(rDate.equals(endDate)){
+				flag = true;
+			}
+			String flghtData = jedis.get(flightNumber1 + dcity + "-" + acity + flightDate + rDate + " " + dateTime);
+			flghtData = rDate + " " + dateTime + "," + flghtData;
+			listKeys1.add(flghtData);
+			dateLong = dateLong + 86400000;
+		}
+		map.put(flightNumber1, listKeys1);
+		udate = sdf.parse(startDate);
+		flag = false;
+		dateLong = udate.getTime();
+		List<String> listKeys2 = new ArrayList<String>();
+		for(int i = 0;i <= 30 ;i++){
+			java.sql.Date sdate = new java.sql.Date(dateLong);
+			String rDate = sdate.toString();
+			if(flag){
+				break;
+			}
+			if(rDate.equals(endDate)){
+				flag = true;
+			}
+			String flghtData = jedis.get(flightNumber2 + dcity + "-" + acity + flightDate + rDate + " " + dateTime);
+			flghtData = rDate + " " + dateTime + "," + flghtData;
+			listKeys2.add(flghtData);
+			dateLong = dateLong + 86400000;
+		}
+		map.put(flightNumber2, listKeys2);
+
+		JSONObject json = JSONObject.fromObject(map);
+		return json.toString();
+	}
+
+
 	/**
 	 * TODO(方法的作用/映射)
 	 *
@@ -250,7 +348,7 @@ public class getCtrip {
 //			System.out.println(keys[i]);
 //		}
 		getCtrip a = new getCtrip();
-		System.out.println(a.flightDate("TAO", "XMN", "2019-01-26", "60", "SC8749", "2019-01-24", "2019-01-25"));
+		System.out.println(a.flightDateTime("TAO", "XMN", "2019-01-29", "10", "MF8528", "SC8749", "2019-01-22", "2019-01-28", "07:00"));
 
 
 	}

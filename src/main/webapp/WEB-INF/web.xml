@@ -104,20 +104,20 @@
 		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
 	</listener>
 
-
+-->
 	<servlet>
 		<servlet-name>mid_manager</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath:springConfig/*-servlet.xml,classpath:springConfig/spring-quartz.xml</param-value>
+			<param-value>classpath:springConfig/*-servlet.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>mid_manager</servlet-name>
 		<url-pattern>/</url-pattern>
-	</servlet-mapping>-->
+	</servlet-mapping>
 	<!-- 页面session配置 -->
 	<session-config>
 		<session-timeout>-1</session-timeout>
@@ -135,15 +135,6 @@
 		<auth-method>BASIC</auth-method>
 	</login-config>
 
-	<servlet>
-		<servlet-name>MainSrv</servlet-name>
-		<servlet-class>
-			com.redapplenet.midmanager.controller.MainSrv
-		</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>MainSrv</servlet-name>
-		<url-pattern>/mainSrv</url-pattern>
-	</servlet-mapping>
+
 
 </web-app>

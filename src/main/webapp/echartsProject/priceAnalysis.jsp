@@ -3,8 +3,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <% String root = request.getContextPath(); %>
 <script type="text/javascript">
+    window.devicePixelRatio = 2;
     var root = "${pageContext.request.contextPath}";
-
 </script>
 <html>
 
@@ -34,6 +34,7 @@
 
 </head>
 <body>
+
 <div class="div_grid" align="center">
     <div id="toolbar" class="toolbar" border="false">
         <div class="buttonbar">
@@ -55,7 +56,7 @@
                     </select>
                 </fieldset>
                 <a href="javascript:void(0);" class="easyui-linkbutton" icon="icon-search"
-                   onclick="initCharts(1)">查询</a>
+                   onclick="initCharts(1,true)">查询</a>
             </form>
         </div>
         <div id="firstChart" style="width: 90%;height: 350px;margin-top: 20px"></div>
@@ -68,10 +69,36 @@
                     <input type="text" id="secondFightNumber" name="secondFightNumber" value="SC4956"/>
                 </fieldset>
                 <a href="javascript:void(0);" class="easyui-linkbutton" icon="icon-search"
-                   onclick="initCharts(2)">查询</a>
+                   onclick="initCharts(2,true)">查询</a>
             </form>
         </div>
         <div id="secondChart" style="width: 90%;height: 350px;margin-top: 20px"></div>
+        <div align="left" style="margin-top: 30px">
+            <form id="conditionFormFourth" name="conditionFormFourth">
+                <fieldset>
+                    <input type="text" id="fourthFightNumberOne" name="fourthFightNumberOne" value="MF8528"/>
+                </fieldset>
+                <fieldset style="margin-left: -30px!important;">
+                    <input type="text" id="fourthFightNumberTwo" name="fourthFightNumberOne" value="SC8749"/>
+                </fieldset>
+                <fieldset style="margin-left: -30px!important;">
+                    <input id="fourthstartTime" name="fourthstartTime">
+                </fieldset>
+                <fieldset style="margin-left: -30px!important;">
+                    <input id="fourthendTime" name="fourthendTime">
+                </fieldset>
+                <br/>
+                <fieldset>
+                    <input id="fourthHour" name="fourthHour">
+                </fieldset>
+                <fieldset style="margin-left: -30px!important;">
+                    <input id="fourthMin" name="fourthMin">
+                </fieldset>
+                <a href="javascript:void(0);" class="easyui-linkbutton" icon="icon-search"
+                   onclick="initCharts(4,true)">查询</a>
+            </form>
+        </div>
+        <div id="fourthChart" style="width: 90%;height: 350px;margin-top: 20px;"></div>
         <div align="left" style="margin-top: 30px">
             <form id="conditionFormThree" name="conditionFormThree">
                 <fieldset>
@@ -84,13 +111,11 @@
                     <input id="endTime" name="endTime">
                 </fieldset>
                 <a href="javascript:void(0);" class="easyui-linkbutton" icon="icon-search"
-                   onclick="initCharts(3)">查询</a>
+                   onclick="initCharts(3,true)">查询</a>
             </form>
         </div>
-        <div id="thirdChartDivs"></div>
+        <div id="thirdChart" style="width: 90%;height: 350px;margin-top: 20px;margin-bottom: 100px;"></div>
     </div>
-    <div id="thirdChart" style="width: 90%;height: 350px;margin-top: 20px;margin-bottom: 100px;"></div>
-
 
 </div>
 
