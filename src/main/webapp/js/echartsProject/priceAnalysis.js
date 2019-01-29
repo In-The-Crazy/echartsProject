@@ -67,7 +67,7 @@ function initDatebox() {
 	var today = new Date();
 	today = today.pattern("yyyy-MM-dd");
 	$('#takeOffTime').datebox({
-		label : '起飞时间：',
+		label : '起飞日期：',
 		labelWidth : 100,
 		labelAlign : 'right',
 		width : 250,
@@ -92,7 +92,7 @@ function initDatebox() {
 	var daysAgoTemp = daysAgo.pattern("yyyy-MM-dd");
 
 	$('#startTime').datebox({
-		label : '查询开始时间：',
+		label : '采集开始日期：',
 		labelWidth : 100,
 		labelAlign : 'right',
 		width : 250,
@@ -101,7 +101,7 @@ function initDatebox() {
 		required : false
 	});
 	$('#endTime').datebox({
-		label : '查询结束时间：',
+		label : '采集结束日期：',
 		labelWidth : 100,
 		labelAlign : 'right',
 		width : 250,
@@ -129,7 +129,7 @@ function initDatebox() {
 	});
 
 	$('#fourthstartTime').datebox({
-		label : '查询开始时间：',
+		label : '采集开始日期：',
 		labelWidth : 100,
 		labelAlign : 'right',
 		width : 250,
@@ -138,7 +138,7 @@ function initDatebox() {
 		required : false
 	});
 	$('#fourthendTime').datebox({
-		label : '查询结束时间：',
+		label : '采集结束日期：',
 		labelWidth : 100,
 		labelAlign : 'right',
 		width : 250,
@@ -172,7 +172,7 @@ function initDatebox() {
  */
 function ajaxTree() {
 	$('#intervalTime').combobox({
-		label : '时间间隔',
+		label : '时间间隔：',
 		labelWidth : 100,
 		labelAlign : "right",
 		data : [{
