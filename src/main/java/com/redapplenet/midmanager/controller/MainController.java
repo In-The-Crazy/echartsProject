@@ -74,8 +74,13 @@ public class MainController {
     @ResponseBody
     public BaseEntity queryTableOne(HttpServletRequest req) {
         String queryTime = req.getParameter("queryTime");
+        int page = Integer.valueOf(req.getParameter("page"));
+        int rows = Integer.valueOf(req.getParameter("rows"));
+        int start = (page - 1) * rows;
+        int end = (page - 1) * rows + rows;
+
         List<Map<String,Object>> list = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 60; i++) {
             Map<String,Object> map = new HashMap<>();
             map.put("sj","2019-01-28 至 2019-01-28");
             map.put("cxs",1+i);
@@ -86,8 +91,12 @@ public class MainController {
             map.put("tpje",1+i);
             list.add(map);
         }
+        if(end>list.size()){
+            end = list.size();
+        }
+        List<Map<String,Object>> returnList = list.subList(start,end);
         BaseEntity baseEntity = new BaseEntity();
-        baseEntity.setRows(list);
+        baseEntity.setRows(returnList);
         baseEntity.setTotal(list.size());
         return baseEntity;
     }
