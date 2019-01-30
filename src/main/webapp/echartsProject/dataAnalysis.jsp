@@ -105,16 +105,22 @@
         <div align="left">
 
         </div>
-        <div id="firstChart" style="width: 40%;height: 400px;margin-left: 0px;margin-top: 120px;float: left"></div>
+        <div id="seventhChart" style="width: 30%;height: 500px;margin-left: 60px;margin-top: 10px;float: left"></div>
+        <div id="eighthChart" style="width: 30%;height: 500px;margin-top: 10px;float: left"></div>
+        <div id="ninthChart" style="width: 30%;height: 500px;margin-top: 10px;float: left"></div>
+        <div id="tenthChart" style="width: 50%;height: 250px;margin-top: -100px;float: left"></div>
+        <div id="elevthChart" style="width: 50%;height: 250px;margin-top: -100px;float: left"></div>
+
+        <div id="firstChart" style="width: 50%;height: 400px;margin-left: 0px;margin-top: 40px;float: left"></div>
 <%--        <div align="left" style="margin-top: 30px">
         </div>--%>
-        <div id="secondChart" style="width: 60%;height: 400px;margin-left: 0px;margin-top: 120px;float: left"></div>
+        <div id="secondChart" style="width: 50%;height: 400px;margin-left: 0px;margin-top: 40px;float: left"></div>
 <%--        <div align="left" style="margin-top: 30px">
         </div>--%>
-        <div id="thirdChart" style="width: 100%;height: 800px;margin-left: 50px;margin-top: 20px;float: left"></div>
-        <div id="fifthChart" style="width: 55%;height: 500px;margin-left: 50px;margin-top: 20px;float: left"></div>
-        <div id="sixthChart" style="width: 35%;height: 500px;margin-left: 50px;margin-top: 20px;float: left"></div>
-        <div id="fourthChart" style="width: 95%;height: 700px;margin-left: 50px;margin-top: 20px;margin-bottom: 100px;float: left"></div>
+        <div id="thirdChart" style="width: 100%;height: 800px;margin-left: 50px;margin-top: 40px;float: left"></div>
+        <div id="fifthChart" style="width: 55%;height: 500px;margin-left: 50px;margin-top: 40px;float: left"></div>
+        <div id="sixthChart" style="width: 35%;height: 500px;margin-left: 50px;margin-top: 40px;float: left"></div>
+        <div id="fourthChart" style="width: 95%;height: 700px;margin-left: 50px;margin-top: 40px;float: left"></div>
 
 
     </div>

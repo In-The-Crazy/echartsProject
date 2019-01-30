@@ -47,62 +47,151 @@ function initCharts() {
 	var fourthChart = echarts.init(document.getElementById('fourthChart'),'chalk');
 	var fifthChart = echarts.init(document.getElementById('fifthChart'),'chalk');
 	var sixthChart = echarts.init(document.getElementById('sixthChart'),'chalk');
+	var seventhChart = echarts.init(document.getElementById('seventhChart'),'chalk');
+	var eighthChart = echarts.init(document.getElementById('eighthChart'),'chalk');
+	var ninthChart = echarts.init(document.getElementById('ninthChart'),'chalk');
+	var tenthChart = echarts.init(document.getElementById('tenthChart'),'chalk');
+	var elevthChart = echarts.init(document.getElementById('elevthChart'),'chalk');
 
 	var firstLegend = [];
-	firstLegend.push('成人');
-	firstLegend.push('儿童');
-	firstLegend.push('婴儿');
-	var firstshowData = [];
-	firstshowData.push({value:1548, name:'成人'});
-	firstshowData.push({value:679, name:'儿童'});
-	firstshowData.push({value:335, name:'婴儿'});
+	firstLegend.push("会员");
+	firstLegend.push("非会员");
+	firstLegend.push("成人（会员）");
+	firstLegend.push("成人（非会员）");
+	firstLegend.push("儿童（会员）");
+	firstLegend.push("儿童（非会员）");
+	firstLegend.push("婴儿（会员）");
+	firstLegend.push("婴儿（非会员）");
+	var firstshowDataone = [];
+	firstshowDataone.push({value: 1548, name: '会员'});
+	firstshowDataone.push({value: 1014, name: '非会员'});
+	var firstshowDatatwo = [];
+	firstshowDatatwo.push({value: 1048, name: '成人（会员）'});
+	firstshowDatatwo.push({value: 300, name: '儿童（会员）'});
+	firstshowDatatwo.push({value: 200, name: '婴儿（会员）'});
+	firstshowDatatwo.push({value: 500, name: '成人（非会员）'});
+	firstshowDatatwo.push({value: 300, name: '儿童（非会员）'});
+	firstshowDatatwo.push({value: 214, name: '婴儿（非会员）'});
 	var firstOption = {
 		backgroundColor: {
 			type: 'pattern',
 			repeat: 'repeat'
 		},
-		title : {
-			text: '乘客类型',
-			x:'center',
-			left:'55%'
+		title: {
+			text: '乘客类型(会员)',
+			x: 'center',
+			left: '50%'
 		},
-		tooltip : {
+		tooltip: {
 			trigger: 'item',
-			formatter: "{a} <br/>{b} : {c} ({d}%)"
+			formatter: "{a} <br/>{b}: {c} ({d}%)"
 		},
 		legend: {
 			orient: 'vertical',
-			left:'20%',
-			data: firstLegend
+			x: 'left',
+			data: firstLegend,
+			left: '10%'
 		},
-		series : [
+		series: [
 			{
 				name: '乘客类型',
 				type: 'pie',
-				radius: [0, '50%'],
-				center: ['60%', '55%'],
-				data:firstshowData,
-				itemStyle: {
-					emphasis: {
-						shadowBlur: 10,
-						shadowOffsetX: 0,
-						shadowColor: 'rgba(0, 0, 0, 0.5)'
-					},
-					normal:{
-						label: {
-							show : true,
-							formatter : "{b} : {c} \n ({d}%)",
-						}
+				selectedMode: 'single',
+				radius: [0, '30%'],
+				center: ['60%', '50%'],
+				label: {
+					normal: {
+						position: 'inner',
+						color: 'black'
 					}
-				}
+				},
+				labelLine: {
+					normal: {
+						show: false
+					}
+				},
+				data: firstshowDataone
+			},
+			{
+				name: '乘客类型',
+				type: 'pie',
+				radius: ['40%', '55%'],
+				center: ['60%', '50%'],
+				label: {
+					normal: {
+						position: 'outside',
+						formatter: "{b} : {c} \n ({d}%)",
+
+					}
+				},
+				data: firstshowDatatwo
 			}
 		]
 	};
 	firstChart.setOption(firstOption);
+	firstChart.on('legendselectchanged', function (obj) {
+		var selected = obj.selected[obj.name];
+		var legend = obj.name;
+		if (legend == '会员') {
+			obj.selected["成人（会员）"] = selected;
+			obj.selected["儿童（会员）"] = selected;
+			obj.selected["婴儿（会员）"] = selected;
+
+		}
+		if (legend == '非会员') {
+			obj.selected["成人（非会员）"] = selected;
+			obj.selected["儿童（非会员）"] = selected;
+			obj.selected["婴儿（非会员）"] = selected;
+		}
+/*		if (legend == '婴儿') {
+
+
+		}*/
+		firstOption.legend.selected = obj.selected;
+		firstChart.setOption(firstOption, true);
+	});
+	firstChart.on('pieselectchanged', function (obj) {
+		debugger;
+		var selected = obj.selected[obj.name];
+		console.log(obj.selected);
+		var name = obj.name;
+		firstshowDatatwo = [];
+		if (selected) {
+			if (name == '会员') {
+				firstshowDataone[0].selected = true;
+				firstshowDatatwo.push({value: 1048, name: '成人（会员）'});
+				firstshowDatatwo.push({value: 300, name: '儿童（会员）'});
+				firstshowDatatwo.push({value: 200, name: '婴儿（会员）'});
+			}
+			if (name == '非会员') {
+				firstshowDataone[1].selected = true;
+				firstshowDatatwo.push({value: 500, name: '成人（非会员）'});
+				firstshowDatatwo.push({value: 300, name: '儿童（非会员）'});
+				firstshowDatatwo.push({value: 214, name: '婴儿（非会员）'});
+
+			}
+/*			if (name == '婴儿') {
+				firstshowDataone[2].selected = true;
+			}*/
+		} else {
+			firstshowDataone[0].selected = false;
+			firstshowDataone[1].selected = false;
+			//firstshowDataone[2].selected = false;
+			firstshowDatatwo.push({value: 1048, name: '成人（会员）'});
+			firstshowDatatwo.push({value: 300, name: '儿童（会员）'});
+			firstshowDatatwo.push({value: 200, name: '婴儿（会员）'});
+			firstshowDatatwo.push({value: 500, name: '成人（非会员）'});
+			firstshowDatatwo.push({value: 300, name: '儿童（非会员）'});
+			firstshowDatatwo.push({value: 214, name: '婴儿（非会员）'});
+		}
+		firstOption.series[1].data = firstshowDatatwo;
+		firstChart.setOption(firstOption, true);
+
+	});
+	firstChart.setOption(firstOption);
 	var secondLegend = [];
-	secondLegend.push("成人");
-	secondLegend.push("儿童");
-	secondLegend.push("婴儿");
+	secondLegend.push("男");
+	secondLegend.push("女");
 	secondLegend.push("成人（男）");
 	secondLegend.push("成人（女）");
 	secondLegend.push("儿童（男）");
@@ -110,25 +199,24 @@ function initCharts() {
 	secondLegend.push("婴儿（男）");
 	secondLegend.push("婴儿（女）");
 	var secondshowDataone = [];
-	secondshowDataone.push({value:1548, name:'成人'});
-	secondshowDataone.push({value:679, name:'儿童'});
-	secondshowDataone.push({value:335, name:'婴儿'});
+	secondshowDataone.push({value:1548, name:'男'});
+	secondshowDataone.push({value:1041, name:'女'});
 	var secondshowDatatwo = [];
 	secondshowDatatwo.push({value:1048, name:'成人（男）'});
-	secondshowDatatwo.push({value:500, name:'成人（女）'});
-	secondshowDatatwo.push({value:544, name:'儿童（男）'});
-	secondshowDatatwo.push({value:135, name:'儿童（女）'});
+	secondshowDatatwo.push({value:300, name:'儿童（男）'});
 	secondshowDatatwo.push({value:200, name:'婴儿（男）'});
-	secondshowDatatwo.push({value:135, name:'婴儿（女）'});
+	secondshowDatatwo.push({value:500, name:'成人（女）'});
+	secondshowDatatwo.push({value:300, name:'儿童（女）'});
+	secondshowDatatwo.push({value:214, name:'婴儿（女）'});
 	var secondOption = {
 		backgroundColor: {
 			type: 'pattern',
 			repeat: 'repeat'
 		},
 		title : {
-			text: '乘客类型',
+			text: '乘客类型(性别)',
 			x:'center',
-			left:'60%'
+			left:'50%'
 		},
 		tooltip: {
 			trigger: 'item',
@@ -138,7 +226,7 @@ function initCharts() {
 			orient: 'vertical',
 			x: 'left',
 			data:secondLegend,
-			left:'20%'
+			left:'10%'
 		},
 		series: [
 			{
@@ -146,7 +234,7 @@ function initCharts() {
 				type:'pie',
 				selectedMode: 'single',
 				radius: [0, '30%'],
-				center: ['65%', '50%'],
+				center: ['60%', '50%'],
 				label: {
 					normal: {
 						position: 'inner',
@@ -164,11 +252,11 @@ function initCharts() {
 				name:'乘客类型',
 				type:'pie',
 				radius: ['40%', '55%'],
-				center: ['65%', '50%'],
+				center: ['60%', '50%'],
 				label: {
 					normal: {
 						position: 'outside',
-						formatter : "{b} : {c} ({d}%)",
+						formatter : "{b} : {c}\n ({d}%)",
 
 					}
 				},
@@ -180,18 +268,21 @@ function initCharts() {
 	secondChart.on('legendselectchanged', function (obj) {
 		var selected = obj.selected[obj.name];
 		var legend = obj.name;
-		if (legend=='成人') {
+		if (legend=='男') {
 			obj.selected["成人（男）"]=selected;
-			obj.selected["成人（女）"]=selected;
-		}
-		if (legend=='儿童') {
 			obj.selected["儿童（男）"]=selected;
-			obj.selected["儿童（女）"]=selected;
-		}
-		if (legend=='婴儿') {
 			obj.selected["婴儿（男）"]=selected;
+
+		}
+		if (legend=='女') {
+			obj.selected["成人（女）"]=selected;
+			obj.selected["儿童（女）"]=selected;
 			obj.selected["婴儿（女）"]=selected;
 		}
+/*		if (legend=='婴儿') {
+
+
+		}*/
 		secondOption.legend.selected = obj.selected;
 		secondChart.setOption(secondOption, true);
 	});
@@ -201,31 +292,34 @@ function initCharts() {
 		var name = obj.name;
 		secondshowDatatwo = [];
 		if(selected){
-			if (name=='成人') {
+			if (name=='男') {
 				secondshowDataone[0].selected=true;
 				secondshowDatatwo.push({value:1048, name:'成人（男）'});
-				secondshowDatatwo.push({value:500, name:'成人（女）'});
-			}
-			if (name=='儿童') {
-				secondshowDataone[1].selected=true;
-				secondshowDatatwo.push({value:544, name:'儿童（男）'});
-				secondshowDatatwo.push({value:135, name:'儿童（女）'});
-			}
-			if (name=='婴儿') {
-				secondshowDataone[2].selected=true;
+				secondshowDatatwo.push({value:300, name:'儿童（男）'});
 				secondshowDatatwo.push({value:200, name:'婴儿（男）'});
-				secondshowDatatwo.push({value:135, name:'婴儿（女）'});
+
 			}
+			if (name=='女') {
+				secondshowDataone[1].selected=true;
+				secondshowDatatwo.push({value:500, name:'成人（女）'});
+				secondshowDatatwo.push({value:300, name:'儿童（女）'});
+				secondshowDatatwo.push({value:214, name:'婴儿（女）'});
+			}
+	/*		if (name=='婴儿') {
+				secondshowDataone[2].selected=true;
+
+
+			}*/
 		} else {
 			secondshowDataone[0].selected=false;
 			secondshowDataone[1].selected=false;
-			secondshowDataone[2].selected=false;
+			//secondshowDataone[2].selected=false;
 			secondshowDatatwo.push({value:1048, name:'成人（男）'});
-			secondshowDatatwo.push({value:500, name:'成人（女）'});
-			secondshowDatatwo.push({value:544, name:'儿童（男）'});
-			secondshowDatatwo.push({value:135, name:'儿童（女）'});
+			secondshowDatatwo.push({value:300, name:'儿童（男）'});
 			secondshowDatatwo.push({value:200, name:'婴儿（男）'});
-			secondshowDatatwo.push({value:135, name:'婴儿（女）'});
+			secondshowDatatwo.push({value:500, name:'成人（女）'});
+			secondshowDatatwo.push({value:300, name:'儿童（女）'});
+			secondshowDatatwo.push({value:214, name:'婴儿（女）'});
 		}
 		secondOption.series[1].data=secondshowDatatwo;
 		secondChart.setOption(secondOption, true);
@@ -886,11 +980,6 @@ function initCharts() {
 	var sixSeriesData = [50000, 35000, 28000, 35000, 10000];
 	var indicatorMax = sixSeriesDataSort.sort(compareNum)[0]+sixSeriesDataSort.sort(compareNum)[sixSeriesDataSort.length-1];
 	var sixOption = {
-		grid:{
-			x:'4%',
-			y:'30%'
-
-		},
 		backgroundColor: {
 			type: 'pattern',
 			repeat: 'repeat'
@@ -952,6 +1041,439 @@ function initCharts() {
 	};
 	sixthChart.setOption(sixOption);
 
+	var seventhOption = {
+		backgroundColor: {
+			type: 'pattern',
+			repeat: 'repeat'
+		},
+		tooltip : {
+			formatter: "{a} <br/>{b} : {c}%"
+		},
+		toolbox: {
+
+		},
+		series : [
+			{
+				name:'业务指标',
+				type:'gauge',
+				min:0,
+				max:100,
+				splitNumber:10,
+				radius: '55%',
+				axisLine: {            // 坐标轴线
+					lineStyle: {       // 属性lineStyle控制线条样式
+						color: [[0.2, '#ff4500'],[0.8, '#1e90ff'],[1,'lime' ]],
+						width: 3,
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				axisLabel: {            // 坐标轴小标记
+					textStyle: {       // 属性lineStyle控制线条样式
+						fontWeight: 'bolder',
+						color: '#fff',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				axisTick: {            // 坐标轴小标记
+					length :15,        // 属性length控制线长
+					lineStyle: {       // 属性lineStyle控制线条样式
+						color: 'auto',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				splitLine: {           // 分隔线
+					length :25,         // 属性length控制线长
+					lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+						width:3,
+						color: '#fff',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				pointer: {           // 分隔线
+					shadowColor : '#fff', //默认透明
+					shadowBlur: 5
+				},
+				title : {
+					textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+						fontWeight: 'bolder',
+						fontSize: 16,
+						color: '#fff',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				detail : {
+					backgroundColor: '#d4a4eb',
+					borderWidth: 1,
+					borderColor: '#fff',
+					shadowColor : '#fff', //默认透明
+					shadowBlur: 5,
+					offsetCenter: [0, '50%'],       // x, y，单位px
+					textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+						fontWeight: 'bolder',
+						color: '#fff'
+					},
+					fontSize :16,
+					formatter:'{value}%'
+				},
+				data:[{value: 80, name: '客座率'}]
+			}
+		]
+	};
+
+	seventhChart.setOption(seventhOption);
+
+	var eighthOption = {
+		backgroundColor: {
+			type: 'pattern',
+			repeat: 'repeat'
+		},
+		tooltip : {
+			formatter: "{a} <br/>{b} : {c}%"
+		},
+		toolbox: {
+
+		},
+		series : [
+			{
+				name:'业务指标',
+				type:'gauge',
+				min:0,
+				max:100,
+				splitNumber:10,
+				radius: '55%',
+				axisLine: {            // 坐标轴线
+					lineStyle: {       // 属性lineStyle控制线条样式
+						color: [[0.2, '#ff4500'],[0.8, '#1e90ff'],[1,'lime' ]],
+						width: 3,
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				axisLabel: {            // 坐标轴小标记
+					textStyle: {       // 属性lineStyle控制线条样式
+						fontWeight: 'bolder',
+						color: '#fff',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				axisTick: {            // 坐标轴小标记
+					length :15,        // 属性length控制线长
+					lineStyle: {       // 属性lineStyle控制线条样式
+						color: 'auto',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				splitLine: {           // 分隔线
+					length :25,         // 属性length控制线长
+					lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+						width:3,
+						color: '#fff',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				pointer: {           // 分隔线
+					shadowColor : '#fff', //默认透明
+					shadowBlur: 5
+				},
+				title : {
+					textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+						fontWeight: 'bolder',
+						fontSize: 16,
+						color: '#fff',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				detail : {
+					backgroundColor: '#d4a4eb',
+					borderWidth: 1,
+					borderColor: '#fff',
+					shadowColor : '#fff', //默认透明
+					shadowBlur: 5,
+					offsetCenter: [0, '50%'],       // x, y，单位px
+					textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+						fontWeight: 'bolder',
+						color: '#fff'
+					},
+					fontSize :16,
+					formatter:'{value}%'
+				},
+				data:[{value: 90, name: '完成率'}]
+			}
+		]
+	};
+
+	eighthChart.setOption(eighthOption);
+	var ninthOption = {
+		backgroundColor: {
+			type: 'pattern',
+			repeat: 'repeat'
+		},
+		tooltip : {
+			formatter: "{a} <br/>{b} : {c}%"
+		},
+		toolbox: {
+
+		},
+		series : [
+			{
+				name:'业务指标',
+				type:'gauge',
+				min:0,
+				max:100,
+				splitNumber:10,
+				radius: '55%',
+				axisLine: {            // 坐标轴线
+					lineStyle: {       // 属性lineStyle控制线条样式
+						color: [[0.2, '#ff4500'],[0.8, '#1e90ff'],[1,'lime' ]],
+						width: 3,
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				axisLabel: {            // 坐标轴小标记
+					textStyle: {       // 属性lineStyle控制线条样式
+						fontWeight: 'bolder',
+						color: '#fff',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				axisTick: {            // 坐标轴小标记
+					length :15,        // 属性length控制线长
+					lineStyle: {       // 属性lineStyle控制线条样式
+						color: 'auto',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				splitLine: {           // 分隔线
+					length :25,         // 属性length控制线长
+					lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+						width:3,
+						color: '#fff',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				pointer: {           // 分隔线
+					shadowColor : '#fff', //默认透明
+					shadowBlur: 5
+				},
+				title : {
+					textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+						fontWeight: 'bolder',
+						fontSize: 16,
+						color: '#fff',
+						shadowColor : '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				detail : {
+					backgroundColor: '#d4a4eb',
+					borderWidth: 1,
+					borderColor: '#fff',
+					shadowColor : '#fff', //默认透明
+					shadowBlur: 5,
+					offsetCenter: [0, '50%'],       // x, y，单位px
+					textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+						fontWeight: 'bolder',
+						color: '#fff'
+					},
+					fontSize :16,
+					formatter:'{value}%'
+				},
+				data:[{value: 20, name: '载运率'}]
+			}
+		]
+	};
+
+	ninthChart.setOption(ninthOption);
+
+
+	var tenthData = [
+		335,
+		679,
+		1548
+	]
+	var tenthData2 = [
+		335,
+		679,
+		1548
+	]
+	tenthData2.sort(compareNum);
+	var tenthOption = {
+		backgroundColor: {
+			type: 'pattern',
+			repeat: 'repeat'
+		},
+		"title": {
+			"text": "乘客类型统计",
+			"left": "center",
+			"y": "0",
+			"textStyle": {
+				"color": "#fff"
+			}
+		},
+		"grid": {
+			"left": "15%",
+			"top": "10%",
+			"bottom": 10
+		},
+		"tooltip": {
+			"trigger": "item",
+			"textStyle": {
+				"fontSize": 12
+			},
+			"formatter": "{b0}:{c0}"
+		},
+		"xAxis": {
+			"max": tenthData2[0]+tenthData2[tenthData2.length-1],
+			"splitLine": {
+				"show": false
+			},
+			"axisLine": {
+				"show": false
+			},
+			"axisLabel": {
+				"show": false
+			},
+			"axisTick": {
+				"show": false
+			}
+		},
+		"yAxis": [
+			{
+				"type": "category",
+				"inverse": false,
+				"data": [
+					"婴儿",
+					"儿童",
+					"成人",
+				],
+				"axisLine": {
+					"show": false
+				},
+				"axisTick": {
+					"show": false
+				},
+				"axisLabel": {
+					"margin": -4,
+					"textStyle": {
+						"color": "#fff",
+						"fontSize": 16.25
+					}
+				}
+			},
+
+		],
+		"series": [
+			{
+				"type": "pictorialBar",
+				"symbol": "image://data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAADYElEQVR4nO2dz0sUYRjHP7tIdAmxQ1LdlhCKMohAIsgiyEuHjkUEFQTlpejS/xCCBB06RBGBBKIG4cGyH0qHBKE9eKyFqBQPRQeNCt06vGNY7bq7szPfeZLnAwuzM+/zgw/DDvMu70wOIVveLscJOwycA44A24CfwAfgKXAbeFVvovlC/o/vuVwuTj+x0FWiYdGbgXvA8RrjHgAXgIVaCbMU3SKr1BhtwEtgZx1jTwI7gG7ga5pNNUO+9pBMuEN9klfYD9xMqZdEsCj6AHAiRtxZYFeyrSSHRdGnYsblCD8jJrEoek8TsbsT6yJhLIrelFFsqlgUPZtRbKpYFP2kidjxxLpIGIuiB4AvMeLmgJGEe0kMi6I/AVdjxPVSx91hVlgUDXAXuEaY16jFMnAJeJhqR01iVTTAdeAYUFxjzBRwCLgl6agJrM51rDAO7AP2EmbxthPO8vfAc2Ams84axLpoCGKLrH1mm8eC6KPAGaAL2Fpj7AZgY7T9DfhRY/wc4eflPmH+OjOynI8uEGbpukXlJ4Dz84V8aWWHcj46q4thFzCNTjJRren2UrlLWPM3WYjuAMYIk/tq2oCx9lK5Q11YLboFGARaxXVX0woMtpfK0uuTWvRFoFNcsxKdhF5kqEX3iuuthbQXtehG/gdMG2kvlm/B1xUuWoSLFmFF9CRwg2TnM4pRzskEc8bGiugR4ArhNjkpJqKcJv51sSJ63eOiRbhoES5ahIsW4aJFuGgRLlqEixbhokW4aBEuWoSLFuGiRbhoES5ahIsW4aJFuGgRLlqEWvTHKvs/p1izWu5qvaSCWvTlCvtmgeEUaw5TeUVtpV5SQy16COgBRoHXhMWb3aS7PnAhqjEQ1RwFeuYL+aEUa/5DFmtYHkefOEwQVmcBvKD+FQNvgNN/P+pHiV8MRbhoES5ahIsW4aJFuGgRLlqEixbhokW4aBEuWoSLFuGiRbhoES5ahIsW4aJFuGgRLlqEixbhokVYEx3nudGKXE1jTfS6xUWLcNEiXLQIFy3CRYtw0SJctAgXLcJFi3DRIv430eUq2+axJvp7jePPqmzHySXFmuhHwFKVYzNA/6rv/VR/s9BSlMsM1kTPEN4DPkU4I8vAO6APOAgsrhq7GO3ri8aUo5ipKIep1zv9AtipgOACGIrLAAAAAElFTkSuQmCC",
+				"symbolRepeat": "fixed",
+				"symbolMargin": "5%",
+				"symbolClip": true,
+				"symbolSize": 22.5,
+				"symbolPosition": "start",
+				"symbolOffset": [
+					20,
+					0
+				],
+				"symbolBoundingData": tenthData2[0]+tenthData2[tenthData2.length-1],
+				"data": tenthData,
+				"z": 10
+			},
+			{
+				"type": "pictorialBar",
+				"itemStyle": {
+					"normal": {
+						"opacity": 0.3
+					}
+				},
+				"label": {
+					"normal": {
+						"show": false
+					}
+				},
+				"animationDuration": 0,
+				"symbolRepeat": "fixed",
+				"symbolMargin": "5%",
+				"symbol": "image://data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAADYElEQVR4nO2dz0sUYRjHP7tIdAmxQ1LdlhCKMohAIsgiyEuHjkUEFQTlpejS/xCCBB06RBGBBKIG4cGyH0qHBKE9eKyFqBQPRQeNCt06vGNY7bq7szPfeZLnAwuzM+/zgw/DDvMu70wOIVveLscJOwycA44A24CfwAfgKXAbeFVvovlC/o/vuVwuTj+x0FWiYdGbgXvA8RrjHgAXgIVaCbMU3SKr1BhtwEtgZx1jTwI7gG7ga5pNNUO+9pBMuEN9klfYD9xMqZdEsCj6AHAiRtxZYFeyrSSHRdGnYsblCD8jJrEoek8TsbsT6yJhLIrelFFsqlgUPZtRbKpYFP2kidjxxLpIGIuiB4AvMeLmgJGEe0kMi6I/AVdjxPVSx91hVlgUDXAXuEaY16jFMnAJeJhqR01iVTTAdeAYUFxjzBRwCLgl6agJrM51rDAO7AP2EmbxthPO8vfAc2Ams84axLpoCGKLrH1mm8eC6KPAGaAL2Fpj7AZgY7T9DfhRY/wc4eflPmH+OjOynI8uEGbpukXlJ4Dz84V8aWWHcj46q4thFzCNTjJRren2UrlLWPM3WYjuAMYIk/tq2oCx9lK5Q11YLboFGARaxXVX0woMtpfK0uuTWvRFoFNcsxKdhF5kqEX3iuuthbQXtehG/gdMG2kvlm/B1xUuWoSLFmFF9CRwg2TnM4pRzskEc8bGiugR4ArhNjkpJqKcJv51sSJ63eOiRbhoES5ahIsW4aJFuGgRLlqEixbhokW4aBEuWoSLFuGiRbhoES5ahIsW4aJFuGgRLlqEWvTHKvs/p1izWu5qvaSCWvTlCvtmgeEUaw5TeUVtpV5SQy16COgBRoHXhMWb3aS7PnAhqjEQ1RwFeuYL+aEUa/5DFmtYHkefOEwQVmcBvKD+FQNvgNN/P+pHiV8MRbhoES5ahIsW4aJFuGgRLlqEixbhokW4aBEuWoSLFuGiRbhoES5ahIsW4aJFuGgRLlqEixbhokVYEx3nudGKXE1jTfS6xUWLcNEiXLQIFy3CRYtw0SJctAgXLcJFi3DRIv430eUq2+axJvp7jePPqmzHySXFmuhHwFKVYzNA/6rv/VR/s9BSlMsM1kTPEN4DPkU4I8vAO6APOAgsrhq7GO3ri8aUo5ipKIep1zv9AtipgOACGIrLAAAAAElFTkSuQmCC",
+				"symbolSize": 22.5,
+				"symbolBoundingData": tenthData2[0]+tenthData2[tenthData2.length-1],
+				"symbolPosition": "start",
+				"symbolOffset": [
+					20,
+					0
+				],
+				"data": tenthData,
+				"z": 5
+			}
+		]
+	};
+
+	tenthChart.setOption(tenthOption);
+
+	var elevthLegend = [];
+	elevthLegend.push('成人');
+	elevthLegend.push('儿童');
+	elevthLegend.push('婴儿');
+	var elevthshowData = [];
+	elevthshowData.push({value:1548, name:'成人'});
+	elevthshowData.push({value:679, name:'儿童'});
+	elevthshowData.push({value:335, name:'婴儿'});
+	var elevthOption = {
+		backgroundColor: {
+			type: 'pattern',
+			repeat: 'repeat'
+		},
+		title : {
+			text: '乘客类型',
+			x:'center',
+			left:'55%'
+		},
+		tooltip : {
+			trigger: 'item',
+			formatter: "{a} <br/>{b} : {c} ({d}%)"
+		},
+		legend: {
+			orient: 'vertical',
+			left:'20%',
+			data: elevthLegend
+		},
+		series : [
+			{
+				name: '乘客类型',
+				type: 'pie',
+				radius: [0, '80%'],
+				center: ['60%', '55%'],
+				data:elevthshowData,
+				itemStyle: {
+					emphasis: {
+						shadowBlur: 10,
+						shadowOffsetX: 0,
+						shadowColor: 'rgba(0, 0, 0, 0.5)'
+					},
+					normal:{
+						label: {
+							show : true,
+							formatter : "{b} : {c} \n ({d}%)",
+						}
+					}
+				}
+			}
+		]
+	};
+	elevthChart.setOption(elevthOption);
 	window.onresize = function () {
 		firstChart.resize();
 		secondChart.resize();
@@ -959,9 +1481,12 @@ function initCharts() {
 		fourthChart.resize();
 		fifthChart.resize();
 		sixthChart.resize();
-
+		seventhChart.resize();
+		eighthChart.resize();
+		ninthChart.resize();
 	}
 }
+
 
 /** --------自定义文本 ------ */
 
