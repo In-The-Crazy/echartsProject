@@ -1,5 +1,12 @@
 /** ----------------加载整体表格-------------------------* */
 $(function() {
+	drawLayer02Label($("#layer02_01 canvas").get(0),"乘客数",60,200);
+	drawLayer02Label($("#layer02_02 canvas").get(0),"售票数",60,400);
+	drawLayer02Label($("#layer02_03 canvas").get(0),"退票数",60,400);
+	drawLayer02Label($("#layer02_04 canvas").get(0),"载运量",60,400);
+	drawLayer02Label($("#layer02_05 canvas").get(0),"起飞班次",60,200);
+	drawLayer02Label($("#layer02_06 canvas").get(0),"延误班次",60,200);
+
 	// 初始化页面角色
 	initPage();
 	// 加载日历选择
@@ -8,13 +15,14 @@ $(function() {
 	ajaxTree();
 	// 加载图表数据
 	initCharts();
-	//map();
 
+	$('label').css('color','white');
 });
 
 
 /** --------初始化页面模块 ------ */
 function initPage() {
+
 
 }
 
@@ -32,10 +40,14 @@ function ajaxTree() {
 
 
 /** --------加载图表数据 ------ */
-function initCharts(queryType) {
-	var firstChart = echarts.init(document.getElementById('firstChart'),'roma');
-	var secondChart = echarts.init(document.getElementById('secondChart'),'roma');
-	var thirdChart = echarts.init(document.getElementById('thirdChart'),'roma');
+function initCharts() {
+	var firstChart = echarts.init(document.getElementById('firstChart'),'chalk');
+	var secondChart = echarts.init(document.getElementById('secondChart'),'chalk');
+	var thirdChart = echarts.init(document.getElementById('thirdChart'),'chalk');
+	var fourthChart = echarts.init(document.getElementById('fourthChart'),'chalk');
+	var fifthChart = echarts.init(document.getElementById('fifthChart'),'chalk');
+	var sixthChart = echarts.init(document.getElementById('sixthChart'),'chalk');
+
 	var firstLegend = [];
 	firstLegend.push('成人');
 	firstLegend.push('儿童');
@@ -45,9 +57,14 @@ function initCharts(queryType) {
 	firstshowData.push({value:679, name:'儿童'});
 	firstshowData.push({value:335, name:'婴儿'});
 	var firstOption = {
+		backgroundColor: {
+			type: 'pattern',
+			repeat: 'repeat'
+		},
 		title : {
 			text: '乘客类型',
-			x:'center'
+			x:'center',
+			left:'55%'
 		},
 		tooltip : {
 			trigger: 'item',
@@ -104,9 +121,14 @@ function initCharts(queryType) {
 	secondshowDatatwo.push({value:200, name:'婴儿（男）'});
 	secondshowDatatwo.push({value:135, name:'婴儿（女）'});
 	var secondOption = {
+		backgroundColor: {
+			type: 'pattern',
+			repeat: 'repeat'
+		},
 		title : {
 			text: '乘客类型',
-			x:'center'
+			x:'center',
+			left:'60%'
 		},
 		tooltip: {
 			trigger: 'item',
@@ -127,7 +149,8 @@ function initCharts(queryType) {
 				center: ['65%', '50%'],
 				label: {
 					normal: {
-						position: 'inner'
+						position: 'inner',
+						color :  'black'
 					}
 				},
 				labelLine: {
@@ -366,22 +389,30 @@ function initCharts(queryType) {
 			{
 				type: 'slider',
 				yAxisIndex: 0,
+				start: 20,
+				end:80,
 				left:'55%'
 			},
 
 			{
 				type: 'inside',
+				start: 20,
+				end:80,
 				yAxisIndex: 0,
 			},
 
 			{
 				type: 'slider',
 				yAxisIndex: 1,
+				start: 20,
+				end:80,
 				left:'55%'
 			},
 
 			{
 				type: 'inside',
+				start: 20,
+				end:80,
 				yAxisIndex: 1,
 
 			}
@@ -526,10 +557,409 @@ function initCharts(queryType) {
 		}]
 	}
 	thirdChart.setOption(thirdOption);
+
+
+	var timeData = [
+		'2009/6/13 0:00', '2009/6/13 1:00', '2009/6/13 2:00', '2009/6/13 3:00', '2009/6/13 4:00', '2009/6/13 5:00', '2009/6/13 6:00', '2009/6/13 7:00', '2009/6/13 8:00', '2009/6/13 9:00', '2009/6/13 10:00', '2009/6/13 11:00', '2009/6/13 12:00', '2009/6/13 13:00', '2009/6/13 14:00', '2009/6/13 15:00', '2009/6/13 16:00', '2009/6/13 17:00', '2009/6/13 18:00', '2009/6/13 19:00', '2009/6/13 20:00', '2009/6/13 21:00', '2009/6/13 22:00', '2009/6/13 23:00',
+		'2009/6/14 0:00', '2009/6/14 1:00', '2009/6/14 2:00', '2009/6/14 3:00', '2009/6/14 4:00', '2009/6/14 5:00', '2009/6/14 6:00', '2009/6/14 7:00', '2009/6/14 8:00', '2009/6/14 9:00', '2009/6/14 10:00', '2009/6/14 11:00', '2009/6/14 12:00', '2009/6/14 13:00', '2009/6/14 14:00', '2009/6/14 15:00', '2009/6/14 16:00', '2009/6/14 17:00', '2009/6/14 18:00', '2009/6/14 19:00', '2009/6/14 20:00', '2009/6/14 21:00', '2009/6/14 22:00', '2009/6/14 23:00',
+		'2009/6/15 0:00', '2009/6/15 1:00', '2009/6/15 2:00', '2009/6/15 3:00', '2009/6/15 4:00', '2009/6/15 5:00', '2009/6/15 6:00', '2009/6/15 7:00', '2009/6/15 8:00', '2009/6/15 9:00', '2009/6/15 10:00', '2009/6/15 11:00', '2009/6/15 12:00', '2009/6/15 13:00', '2009/6/15 14:00', '2009/6/15 15:00', '2009/6/15 16:00', '2009/6/15 17:00', '2009/6/15 18:00', '2009/6/15 19:00', '2009/6/15 20:00', '2009/6/15 21:00', '2009/6/15 22:00', '2009/6/15 23:00',
+		'2009/6/16 0:00', '2009/6/16 1:00', '2009/6/16 2:00', '2009/6/16 3:00', '2009/6/16 4:00', '2009/6/16 5:00', '2009/6/16 6:00', '2009/6/16 7:00', '2009/6/16 8:00', '2009/6/16 9:00', '2009/6/16 10:00', '2009/6/16 11:00', '2009/6/16 12:00', '2009/6/16 13:00', '2009/6/16 14:00', '2009/6/16 15:00', '2009/6/16 16:00', '2009/6/16 17:00', '2009/6/16 18:00', '2009/6/16 19:00', '2009/6/16 20:00', '2009/6/16 21:00', '2009/6/16 22:00', '2009/6/16 23:00',
+		'2009/6/17 0:00', '2009/6/17 1:00', '2009/6/17 2:00', '2009/6/17 3:00', '2009/6/17 4:00', '2009/6/17 5:00', '2009/6/17 6:00', '2009/6/17 7:00', '2009/6/17 8:00', '2009/6/17 9:00', '2009/6/17 10:00', '2009/6/17 11:00', '2009/6/17 12:00', '2009/6/17 13:00', '2009/6/17 14:00', '2009/6/17 15:00', '2009/6/17 16:00', '2009/6/17 17:00', '2009/6/17 18:00', '2009/6/17 19:00', '2009/6/17 20:00', '2009/6/17 21:00', '2009/6/17 22:00', '2009/6/17 23:00',
+		'2009/6/18 0:00', '2009/6/18 1:00', '2009/6/18 2:00', '2009/6/18 3:00', '2009/6/18 4:00', '2009/6/18 5:00', '2009/6/18 6:00', '2009/6/18 7:00', '2009/6/18 8:00', '2009/6/18 9:00', '2009/6/18 10:00', '2009/6/18 11:00', '2009/6/18 12:00', '2009/6/18 13:00', '2009/6/18 14:00', '2009/6/18 15:00', '2009/6/18 16:00', '2009/6/18 17:00', '2009/6/18 18:00', '2009/6/18 19:00', '2009/6/18 20:00', '2009/6/18 21:00', '2009/6/18 22:00', '2009/6/18 23:00',
+		'2009/6/19 0:00', '2009/6/19 1:00', '2009/6/19 2:00', '2009/6/19 3:00', '2009/6/19 4:00', '2009/6/19 5:00', '2009/6/19 6:00', '2009/6/19 7:00', '2009/6/19 8:00', '2009/6/19 9:00', '2009/6/19 10:00', '2009/6/19 11:00', '2009/6/19 12:00', '2009/6/19 13:00', '2009/6/19 14:00', '2009/6/19 15:00', '2009/6/19 16:00', '2009/6/19 17:00', '2009/6/19 18:00', '2009/6/19 19:00', '2009/6/19 20:00', '2009/6/19 21:00', '2009/6/19 22:00', '2009/6/19 23:00',
+	];
+
+	var data1 =[
+		597,596,596,695,595,594,594,794,594,594,594,594,597,596,596,595,595,594,494,594,594,594,594,594,
+		597,596,596,695,595,594,594,794,594,594,594,594,597,596,596,595,595,594,494,594,594,594,594,594,
+		597,596,596,695,595,594,594,794,594,594,594,594,597,596,596,595,595,594,494,594,594,594,594,594,
+		597,596,596,695,595,594,594,794,594,594,594,594,597,596,596,595,595,594,494,594,594,594,594,594,
+		597,596,596,695,595,594,594,794,594,594,594,594,597,596,596,595,595,594,494,594,594,594,594,594,
+		597,596,596,695,595,594,594,794,594,594,594,594,597,596,596,595,595,594,494,594,594,594,594,594,
+		597,596,596,695,595,594,594,794,594,594,594,594,597,596,596,595,595,594,494,594,594,594,594,594
+
+	];
+	var data2 =[
+		10,5,2,3,10,6,7,4,10,5,2,3,10,6,7,4,10,5,2,3,10,6,7,4,
+		10,5,2,3,10,6,7,4,10,5,2,3,10,6,7,4,10,5,2,3,10,6,7,4,
+		10,5,2,3,10,6,7,4,10,5,2,3,10,6,7,4,10,5,2,3,10,6,7,4,
+		10,5,2,3,10,6,7,4,10,5,2,3,10,6,7,4,10,5,2,3,10,6,7,4,
+		10,5,2,3,10,6,7,4,10,5,2,3,10,6,7,4,10,5,2,3,10,6,7,4,
+		10,5,2,3,10,6,7,4,10,5,2,3,10,6,7,4,10,5,2,3,10,6,7,4,
+		10,5,2,3,10,6,7,4,10,5,2,3,10,6,7,4,10,5,2,3,10,6,7,4
+
+	];
+	var max1 = Math.max.apply(null, data1);
+	var min1 = Math.min.apply(null, data1);
+	var max2 = Math.max.apply(null, data2);
+	var min2 = Math.min.apply(null, data2);
+	timeData = timeData.map(function (str) {
+		return str.replace('2009/', '');
+	});
+
+	var fourthOption = {
+		backgroundColor: {
+			type: 'pattern',
+			image: canvas,
+			repeat: 'repeat'
+		},
+		title: {
+			text: '航班价格与剩余座位',
+			x: 'center'
+		},
+		tooltip: {
+			trigger: 'axis',
+			axisPointer: {
+				animation: false
+			}
+		},
+		legend: {
+			data:['航班价格','剩余座位'],
+			x: 'left'
+		},
+		toolbox: {
+
+		},
+		axisPointer: {
+			link: {xAxisIndex: 'all'}
+		},
+		dataZoom: [
+			{
+				show: true,
+				realtime: true,
+				start: 20,
+				end: 80,
+				xAxisIndex: [0, 1]
+			},
+			{
+				type: 'inside',
+				realtime: true,
+				start: 20,
+				end: 80,
+				xAxisIndex: [0, 1]
+			}
+		],
+		grid: [{
+			left: 50,
+			right: 50,
+			height: '35%'
+		}, {
+			left: 50,
+			right: 50,
+			top: '55%',
+			height: '35%'
+		}],
+		xAxis : [
+			{
+				type : 'category',
+				boundaryGap : false,
+				axisLine: {onZero: true},
+				data: timeData
+			},
+			{
+				gridIndex: 1,
+				type : 'category',
+				boundaryGap : false,
+				axisLine: {onZero: true},
+				data: timeData,
+				position: 'top'
+			}
+		],
+		yAxis : [
+			{
+				name : '航班价格',
+				type : 'value',
+				min:min1-min1/4,
+				max:max1+min1/4
+			},
+			{
+				name : '剩余座位',
+				gridIndex: 1,
+				type : 'value',
+				inverse: true,
+				min:min2-min2/4,
+				max:max2+min2/4
+			}
+		],
+		series : [
+			{
+				name:'航班价格',
+				type:'line',
+				symbolSize: 8,
+				hoverAnimation: false,
+				data:data1
+			},
+			{
+				name:'剩余座位',
+				type:'line',
+				xAxisIndex: 1,
+				yAxisIndex: 1,
+				symbolSize: 8,
+				hoverAnimation: false,
+				data: data2
+			}
+		]
+	};
+
+	fourthChart.setOption(fourthOption);
+
+	var posList = [
+		'left', 'right', 'top', 'bottom',
+		'inside',
+		'insideTop', 'insideLeft', 'insideRight', 'insideBottom',
+		'insideTopLeft', 'insideTopRight', 'insideBottomLeft', 'insideBottomRight'
+	];
+	var app ={}
+
+	app.configParameters = {
+		rotate: {
+			min: -90,
+			max: 90
+		},
+		align: {
+			options: {
+				left: 'left',
+				center: 'center',
+				right: 'right'
+			}
+		},
+		verticalAlign: {
+			options: {
+				top: 'top',
+				middle: 'middle',
+				bottom: 'bottom'
+			}
+		},
+		position: {
+			options: echarts.util.reduce(posList, function (map, pos) {
+				map[pos] = pos;
+				return map;
+			}, {})
+		},
+		distance: {
+			min: 0,
+			max: 100
+		}
+	};
+
+	app.config = {
+		rotate: 90,
+		align: 'left',
+		verticalAlign: 'middle',
+		position: 'insideBottom',
+		distance: 15,
+		onChange: function () {
+			var labelOption = {
+				normal: {
+					rotate: app.config.rotate,
+					align: app.config.align,
+					verticalAlign: app.config.verticalAlign,
+					position: app.config.position,
+					distance: app.config.distance
+				}
+			};
+			myChart.setOption({
+				series: [{
+					label: labelOption
+				}, {
+					label: labelOption
+				}, {
+					label: labelOption
+				}, {
+					label: labelOption
+				}]
+			});
+		}
+	};
+
+
+	var labelOption = {
+		normal: {
+			show: true,
+			position: app.config.position,
+			distance: app.config.distance,
+			align: app.config.align,
+			verticalAlign: app.config.verticalAlign,
+			rotate: app.config.rotate,
+			formatter: '{c}  {name|{a}}',
+			fontSize: 16,
+			rich: {
+
+			},
+			color :  '#eeeeee'
+		}
+	};
+	var fifthLegend = ['支付宝', '微信', '银联', '现金', '其他']
+	var fifthOption = {
+		title : {
+			text: '各航班订单支付渠道统计',
+			x:'center'
+		},
+		dataZoom: [
+			{
+				show: true,
+				start: 0,
+				end: 100,
+			},
+			{
+				type: 'inside',
+				start: 20,
+				end: 80,
+			}
+		],
+		grid:{
+			x:'6%',
+			y:'20%'
+
+		},
+		backgroundColor: {
+			type: 'pattern',
+			repeat: 'repeat'
+		},
+		tooltip: {
+			trigger: 'axis',
+			axisPointer: {
+				type: 'shadow'
+			}
+		},
+		legend: {
+			data: fifthLegend,
+			top:'10%'
+		},
+		toolbox: {
+
+		},
+		calculable: true,
+		xAxis: [
+			{
+				type: 'category',
+				axisTick: {show: false},
+				data: [
+				"MF8527",
+				"SC8748",
+				"SC4599",
+				"SC4960",
+				"MF8581"]
+			}
+		],
+		yAxis: [
+			{
+				type: 'value'
+			}
+		],
+		series: [
+			{
+				name: '支付宝',
+				type: 'bar',
+				barGap: 0,
+				label: labelOption,
+				data: [320, 332, 301, 334, 390]
+			},
+			{
+				name: '微信',
+				type: 'bar',
+				label: labelOption,
+				data: [220, 182, 191, 234, 290]
+			},
+			{
+				name: '银联',
+				type: 'bar',
+				label: labelOption,
+				data: [150, 232, 201, 154, 190]
+			},
+			{
+				name: '现金',
+				type: 'bar',
+				label: labelOption,
+				data: [98, 77, 101, 99, 40]
+			},
+			{
+				name: '其他',
+				type: 'bar',
+				label: labelOption,
+				data: [98, 77, 101, 99, 40]
+			}
+		]
+	};
+	fifthChart.setOption(fifthOption);
+    var sixSeriesDataSort = [50000, 35000, 28000, 35000, 10000];
+	var sixSeriesData = [50000, 35000, 28000, 35000, 10000];
+	var indicatorMax = sixSeriesDataSort.sort(compareNum)[0]+sixSeriesDataSort.sort(compareNum)[sixSeriesDataSort.length-1];
+	var sixOption = {
+		grid:{
+			x:'4%',
+			y:'30%'
+
+		},
+		backgroundColor: {
+			type: 'pattern',
+			repeat: 'repeat'
+		},
+		title: {
+			text: '订单支付渠道雷达图',
+			x:"center"
+		},
+		tooltip: {},
+		legend: {
+			top : '6%',
+			data: ['支付雷达'],
+			orient: 'horizontal',
+		},
+		radar: {
+			// shape: 'circle',
+			center: ['50%', '60%'],
+			name: {
+				textStyle: {
+					color: '#fff',
+					backgroundColor: '#72ccff',
+					borderRadius: 3,
+					padding: [3, 5]
+				}
+			},
+			indicator: [
+				{ name: '支付宝', max: indicatorMax},
+				{ name: '微信', max: indicatorMax},
+				{ name: '银联', max: indicatorMax},
+				{ name: '现金', max: indicatorMax},
+				{ name: '其他', max: indicatorMax}
+			],
+			splitArea : {
+				show : true,
+				areaStyle : {
+					color: 'rgba(0,0,0,0)'
+				}
+			},
+			splitLine : {
+				show : true,
+				lineStyle : {
+					width : 1,
+					color : '#72ccff'
+				}
+			}
+
+		},
+		series: [{
+			name: '订单支付统计',
+			type: 'radar',
+			// areaStyle: {normal: {}},
+			data : [
+				{
+					value : sixSeriesData,
+					name : '支付雷达'
+				}
+			]
+		}]
+	};
+	sixthChart.setOption(sixOption);
+
 	window.onresize = function () {
 		firstChart.resize();
 		secondChart.resize();
 		thirdChart.resize();
+		fourthChart.resize();
+		fifthChart.resize();
+		sixthChart.resize();
+
 	}
 }
 
@@ -585,252 +1015,33 @@ var compareNum = function (x, y) {
 	}
 }
 
-function map(){
-	var map = L.map('map');
-	var baseLayers = {
-		"高德地图": L.tileLayer('http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
-			subdomains: "1234"
-		}),
-		'高德影像': L.layerGroup([L.tileLayer('http://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
-			subdomains: "1234"
-		}), L.tileLayer('http://t{s}.tianditu.cn/DataServer?T=cta_w&X={x}&Y={y}&L={z}', {
-			subdomains: "1234"
-		})]),
-		"立体地图": L.tileLayer('https://a.tiles.mapbox.com/v3/examples.c7d2024a/{z}/{x}/{y}.png', {
-			attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-			key: 'BC9A493B41014CAABB98F0471D759707',
-			styleId: 22677
-		}),
-		"Foursquare": L.tileLayer('https://a.tiles.mapbox.com/v3/foursquare.map-0y1jh28j/{z}/{x}/{y}.png', {
-			attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-			key: 'BC9A493B41014CAABB98F0471D759707',
-			styleId: 22677
-		}),
-		'GeoQ灰色底图': L.tileLayer('http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}').addTo(map)
-	};
-	L.tileLayer('https://a.tiles.mapbox.com/v3/foursquare.map-0y1jh28j/{z}/{x}/{y}.png', {
-		attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-		key: 'BC9A493B41014CAABB98F0471D759707',
-		styleId: 22677
+function drawLayer02Label(canvasObj,text,textBeginX,lineEndX){
+	var colorValue = '#04918B';
+
+	var ctx = canvasObj.getContext("2d");
+
+	ctx.beginPath();
+	ctx.arc(35,55,2,0,2*Math.PI);
+	ctx.closePath();
+	ctx.fillStyle = colorValue;
+	ctx.fill();
+
+	ctx.moveTo(35,55);
+	ctx.lineTo(60,80);
+	ctx.lineTo(lineEndX,80);
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = colorValue;
+	ctx.stroke();
+
+	ctx.font='12px Georgia';
+	ctx.fillStyle = colorValue;
+	ctx.fillText(text,textBeginX,92);
+}
+
+function sum(arr) {
+	return arr.reduce(function(prev, curr, idx, arr){
+		return prev + curr;
 	});
-	var layercontrol = L.control.layers(baseLayers,{}, {
-		position: "topleft"
-	}).addTo(map);
-	map.setView(L.latLng(37.550339, 104.114129), 4);
-	var overlay = new L.echartsLayer3(map, echarts);
-	var chartsContainer = overlay.getEchartsContainer();
-	var myChart = overlay.initECharts(chartsContainer);
-	var geoCoordMap ={};
-	$.ajax({
-		type: 'post',
-		async: false,
-		url:root+"/mainSrv/china",
-		dataType: 'json',
-		success: function (data) {
-			$.each(data, function (infoIndex, info) {
-				if (info.name == '北京' || info.name == '上海' || info.name == '天津' || info.name == '重庆') {
-					var name = info.name;
-					geoCoordMap[name] = [info.log, info.lat];
-				} else {
-					var data2 = info.children;
-					$.each(data2, function (infoIndex2, info2) {
-						var name = info2.name;
-						geoCoordMap[name] = [info2.log, info2.lat];
-					});
-				}
-
-			});
-		}
-	});
-
-	var BJData = [
-		[{name: '马鞍山'}, {name: '上海', value: 95}],
-		[{name: '马鞍山'}, {name: '广州', value: 90}],
-		[{name: '马鞍山'}, {name: '大连', value: 80}],
-		[{name: '马鞍山'}, {name: '南宁', value: 70}],
-		[{name: '马鞍山'}, {name: '南昌', value: 60}],
-		[{name: '马鞍山'}, {name: '拉萨', value: 50}],
-		[{name: '马鞍山'}, {name: '长春', value: 40}],
-		[{name: '马鞍山'}, {name: '包头', value: 30}],
-		[{name: '马鞍山'}, {name: '重庆', value: 20}],
-		[{name: '马鞍山'}, {name: '常州', value: 10}]
-	];
-	var SHData = [
-		[{name: '上海'}, {name: '包头', value: 95}],
-		[{name: '上海'}, {name: '昆明', value: 90}],
-		[{name: '上海'}, {name: '广州', value: 80}],
-		[{name: '上海'}, {name: '郑州', value: 70}],
-		[{name: '上海'}, {name: '长春', value: 60}],
-		[{name: '上海'}, {name: '重庆', value: 50}],
-		[{name: '上海'}, {name: '长沙', value: 40}],
-		[{name: '上海'}, {name: '北京', value: 30}],
-		[{name: '上海'}, {name: '丹东', value: 20}],
-		[{name: '上海'}, {name: '大连', value: 10}]
-	];
-	var GZData = [
-		[{name: '广州'}, {name: '福州', value: 95}],
-		[{name: '广州'}, {name: '太原', value: 90}],
-		[{name: '广州'}, {name: '长春', value: 80}],
-		[{name: '广州'}, {name: '重庆', value: 70}],
-		[{name: '广州'}, {name: '西安', value: 60}],
-		[{name: '广州'}, {name: '成都', value: 50}],
-		[{name: '广州'}, {name: '常州', value: 40}],
-		[{name: '广州'}, {name: '北京', value: 30}],
-		[{name: '广州'}, {name: '北海', value: 20}],
-		[{name: '广州'}, {name: '海口', value: 10}]
-	];
-	var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
-	var convertData = function (data) {
-		var res = [];
-		for (var i = 0; i < data.length; i++) {
-			var dataItem = data[i];
-			var fromCoord = geoCoordMap[dataItem[0].name];
-			var toCoord = geoCoordMap[dataItem[1].name];
-			if (fromCoord && toCoord) {
-				res.push([{
-					coord: fromCoord
-				}, {
-					coord: toCoord
-				}]);
-			}
-		}
-		return res;
-	};
-	var color = ['#a6c84c', '#ffa022', '#46bee9'];
-	var series = [];
-	var showData = [[]];
-	showData[0]=['马鞍山', BJData];
-	showData[1]=['上海', SHData];
-	showData[2]=['广州', GZData];
-	showData.forEach(function (item, i) {
-		series.push({
-				name: item[0],
-				type: 'lines',
-				zlevel: 1,
-				effect: {
-					show: true,
-					period: 6,
-					trailLength: 0.7,
-					color: '#fff',
-					symbolSize: 3
-				},
-				lineStyle: {
-					normal: {
-						color: color[i],
-						width: 0,
-						curveness: 0.2
-					}
-				},
-				data: convertData(item[1])
-			},
-			{
-				name: item[0],
-				type: 'lines',
-				zlevel: 2,
-				effect: {
-					show: true,
-					period: 6,
-					trailLength: 0,
-					symbol: planePath,
-					symbolSize: 15
-				},
-				lineStyle: {
-					normal: {
-						color: color[i],
-						width: 1,
-						opacity: 0.4,
-						curveness: 0.2
-					}
-				},
-				data: convertData(item[1])
-			},
-			{
-				name: item[0],
-				type: 'effectScatter',
-				coordinateSystem: 'geo',
-				zlevel: 2,
-				rippleEffect: {
-					brushType: 'stroke'
-				},
-				label: {
-					normal: {
-						show: true,
-						position: 'right',
-						formatter: '{b}'
-					}
-				},
-				symbolSize: function (val) {
-					return val[2] / 8;
-				},
-				itemStyle: {
-					normal: {
-						color: color[i]
-					}
-				},
-				data: item[1].map(function (dataItem) {
-					return {
-						name: dataItem[1].name,
-						value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
-					};
-				})
-			});
-	});
-	var option = {
-//        backgroundColor: '#404a59',
-		title: {
-			text: '航线展示',
-			left: 'center',
-			textStyle: {
-				color: '#fff'
-			}
-		},
-		tooltip: {
-			trigger: 'item',
-			formatter:function(params){
-				var returnInfo = params.seriesName;
-				$.each(showData, function (infoIndex, info) {
-					if(info[0]==params.seriesName){
-						returnInfo+="->"+info[1][params.dataIndex][1].name;
-						return false;
-					}
-				});
-				return returnInfo;
-			}
-		},
-		legend: {
-			orient: 'vertical',
-			top: 'bottom',
-			left: 'right',
-			data: ['马鞍山', '上海', '广州'],
-			textStyle: {
-				color: '#fff'
-			},
-			selectedMode: 'single'
-		},
-		geo: {
-			map: '',
-			label: {
-				emphasis: {
-					show: false
-				}
-			},
-			roam: true,
-			itemStyle: {
-				normal: {
-					areaColor: '#323c48',
-					borderColor: '#404a59',
-
-				},
-				emphasis: {
-					areaColor: '#2a333d'
-				}
-			}
-		},
-		series: series
-	};
-	// 使用刚指定的配置项和数据显示图表。
-	overlay.setOption(option);
-
 }
 
 

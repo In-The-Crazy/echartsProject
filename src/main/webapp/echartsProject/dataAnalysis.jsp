@@ -8,11 +8,20 @@
     var root = "${pageContext.request.contextPath}";
 </script>
 <head>
+    <style type="text/css">
 
+        body{background-image: url(../images/nybj.png);background-size:100% 100%;font-weight:bold;}
+        .layer{position:relative;width:100%;}
+        #layer01 > div{height:100%;float:left;position:relative;}
+        .layer01-data{position: absolute;width: auto;height: 100px;color: white;top: 15px;left: 45%;}
+        #layer02 > div{height:100%;float:left;position:relative;}
+        .layer02-data{position: absolute;width: auto;height: 100px;color: white;top: 45px;left: 65px;}
+
+    </style>
     <html>
 
     <head>
-        <title>运价对比</title>
+        <title>数据分析</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
         <link href="<%=root%>/js/jquery/themes/default/easyui.css" rel="stylesheet" type="text/css" id="themes" />
@@ -28,46 +37,91 @@
         <script src="<%=root%>/js/common/custom.js" type="text/javascript"></script>
         <script src="<%=root%>/js/common/validator.js" type="text/javascript"></script>
         <script src="<%=root%>/js/ECharts/3.7.1/echarts.min.js"></script>
-        <script src="<%=root%>/js/ECharts/3.7.1/theme/roma.js"></script>
+        <script src="<%=root%>/js/ECharts/3.7.1/theme/chalk.js"></script>
         <script src="<%=root%>/js/project/common/formater.js" type="text/javascript"></script>
         <script src="<%=root%>/js/project/common/validator.js" type="text/javascript"></script>
         <script src="<%=root%>/js/ckeditor/ckeditor.js" type="text/javascript"></script>
         <script src="<%=root%>/js/common/handlebars.min.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="<%=root%>/leaflet/leaflet.css">
-        <script src="<%=root%>/dist/main.min.js"></script>
-
-    <script type="text/javascript" src="<%=root%>/js/echartsProject/dataAnalysis.js"></script>
-
-    <style>
-        html, body, #map {
-            height: 100%;
-            padding: 0;
-            margin: 0;
-        }
-        #forkongithub a{background:#000;color:#fff;text-decoration:none;font-family:arial,sans-serif;text-align:center;font-weight:bold;padding:5px 40px;font-size:1rem;line-height:2rem;position:relative;transition:0.5s;}#forkongithub a:hover{background:#c11;color:#fff;}#forkongithub a::before,#forkongithub a::after{content:"";width:100%;display:block;position:absolute;top:1px;left:0;height:1px;background:#fff;}#forkongithub a::after{bottom:1px;top:auto;}@media screen and (min-width:800px){#forkongithub{position:fixed;display:block;top:0;right:0;width:200px;overflow:hidden;height:200px;z-index:9999;}#forkongithub a{width:200px;position:absolute;top:60px;right:-60px;transform:rotate(45deg);-webkit-transform:rotate(45deg);-ms-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);box-shadow:4px 4px 10px rgba(0,0,0,0.8);}}
-    </style>
+        <script type="text/javascript" src="<%=root%>/js/echartsProject/dataAnalysis.js"></script>
 </head>
 <body>
+<div  class="main">
+    <div id="layer01" class="layer" style="height:50px;">
+        <div id="layer01_01" style="width:100%;">
+            <div class="layer01-data">
+                <span style="font-size:26px;">航班数据分析</span>
+            </div>
+        </div>
+
+    </div>
+    <div id="layer02" class="layer" style="height:15%;">
+        <div id="layer02_01" style="width:20%;">
+            <div class="layer02-data">
+                <span style="font-size:26px;">400000</span>
+                <span style="font-size:16px;">人次</span>
+            </div>
+            <canvas width="200" height="100"></canvas>
+        </div>
+        <div id="layer02_02" style="width:20%;">
+            <div class="layer02-data">
+                <span style="font-size:26px;">400000</span>
+                <span style="font-size:16px;">张</span>
+            </div>
+            <canvas width="200" height="100"></canvas>
+        </div>
+        <div id="layer02_03" style="width:20%;">
+            <div class="layer02-data">
+                <span style="font-size:26px;">2000</span>
+                <span style="font-size:16px;">张</span>
+            </div>
+            <canvas width="200" height="100"></canvas>
+        </div>
+        <div id="layer02_04" style="width:20%;">
+            <div class="layer02-data">
+                <span style="font-size:26px;">50000</span>
+                <span style="font-size:16px;">kg</span>
+            </div>
+            <canvas width="200" height="100"></canvas>
+        </div>
+        <div id="layer02_05" style="width:10%;">
+            <div class="layer02-data">
+                <span style="font-size:26px;">50</span>
+                <span style="font-size:16px;">次</span>
+            </div>
+            <canvas width="120" height="100"></canvas>
+        </div>
+        <div id="layer02_06" style="width:10%;">
+            <div class="layer02-data">
+                <span style="font-size:26px;">5</span>
+                <span style="font-size:16px;">次</span>
+            </div>
+            <canvas width="120" height="100"></canvas>
+        </div>
+    </div>
+
 <div class="div_grid" align="center">
     <div id="toolbar" class="toolbar" border="false" >
-<%--       <div align="left">
-        </div>
-        <div id="map" style="width: 100%;height: 500px;float: left"></div>--%>
+
         <div align="left">
 
         </div>
-        <div id="firstChart" style="width: 40%;height: 450px;margin-left: 0px;margin-top: 20px;float: left"></div>
+        <div id="firstChart" style="width: 40%;height: 400px;margin-left: 0px;margin-top: 120px;float: left"></div>
 <%--        <div align="left" style="margin-top: 30px">
         </div>--%>
-        <div id="secondChart" style="width: 60%;height: 450px;margin-left: 0px;margin-top: 20px;float: left"></div>
+        <div id="secondChart" style="width: 60%;height: 400px;margin-left: 0px;margin-top: 120px;float: left"></div>
 <%--        <div align="left" style="margin-top: 30px">
         </div>--%>
-        <div id="thirdChart" style="width: 100%;height: 900px;margin-left: 50px;margin-top: 20px;margin-bottom: 100px;float: left"></div>
+        <div id="thirdChart" style="width: 100%;height: 800px;margin-left: 50px;margin-top: 20px;float: left"></div>
+        <div id="fifthChart" style="width: 55%;height: 500px;margin-left: 50px;margin-top: 20px;float: left"></div>
+        <div id="sixthChart" style="width: 35%;height: 500px;margin-left: 50px;margin-top: 20px;float: left"></div>
+        <div id="fourthChart" style="width: 95%;height: 700px;margin-left: 50px;margin-top: 20px;margin-bottom: 100px;float: left"></div>
+
+
     </div>
 
 
 </div>
-
+</div>
 
 </body>
 </html>
