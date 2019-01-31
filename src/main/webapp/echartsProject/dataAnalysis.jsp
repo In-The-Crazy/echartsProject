@@ -121,7 +121,7 @@
         <div id="fifthChart" style="width: 55%;height: 500px;margin-left: 50px;margin-top: 40px;float: left"></div>
         <div id="sixthChart" style="width: 35%;height: 500px;margin-left: 50px;margin-top: 40px;float: left"></div>
         <div id="fourthChart" style="width: 95%;height: 700px;margin-left: 50px;margin-top: 40px;float: left"></div>
-
+        <div id="twelfthChart" style="width: 100%;height: 500px;margin-left: 50px;margin-top: 40px;float: left"></div>
 
     </div>
 

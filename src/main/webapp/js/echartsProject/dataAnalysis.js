@@ -52,6 +52,8 @@ function initCharts() {
 	var ninthChart = echarts.init(document.getElementById('ninthChart'),'chalk');
 	var tenthChart = echarts.init(document.getElementById('tenthChart'),'chalk');
 	var elevthChart = echarts.init(document.getElementById('elevthChart'),'chalk');
+	var twelfthChart = echarts.init(document.getElementById('twelfthChart'),'chalk');
+
 
 	var firstLegend = [];
 	firstLegend.push("会员");
@@ -1474,6 +1476,125 @@ function initCharts() {
 		]
 	};
 	elevthChart.setOption(elevthOption);
+
+	var colors = ['#5793f3', '#d14a61', '#f7c5a0'];
+	var twelfthOption = {
+		title: {
+			text: '航班价格比对',
+			x: 'center'
+		},
+		dataZoom: [
+			{
+				show: true,
+				realtime: true,
+				start: 20,
+				end: 80,
+				xAxisIndex: [0, 1]
+
+			},
+			{
+				type: 'inside',
+				realtime: true,
+				start: 20,
+				end: 80,
+				xAxisIndex: [0, 1]
+
+			}
+		],
+		backgroundColor: {
+			type: 'pattern',
+			repeat: 'repeat'
+		},
+		color: colors,
+
+		tooltip: {
+			trigger: 'none',
+			axisPointer: {
+				type: 'cross'
+			}
+		},
+		legend: {
+			data:['2015', '2016'] ,
+			top: 40 ,
+		},
+		grid: {
+			left: 50,
+			top: 100,
+			bottom: 50
+		},
+		xAxis: [
+			{
+				type: 'category',
+				axisTick: {
+					alignWithLabel: true
+				},
+				axisLine: {
+					onZero: false,
+					lineStyle: {
+						color: colors[1]
+					}
+				},
+				axisPointer: {
+					label: {
+						formatter: function (params) {
+							console.log(params);
+							return '价格  ' + params.value
+								+ (params.seriesData.length ? '：' + params.seriesData[0].data : '');
+						}
+					}
+				},
+				data: ["2016-1", "2016-2", "2016-3", "2016-4", "2016-5", "2016-6", "2016-7", "2016-8", "2016-9", "2016-10", "2016-11", "2016-12"]
+			},
+			{
+				type: 'category',
+				axisTick: {
+					alignWithLabel: true
+				},
+				axisLine: {
+					onZero: false,
+					lineStyle: {
+						color: colors[0]
+					}
+				},
+				axisPointer: {
+					label: {
+						formatter: function (params) {
+							return '价格  ' + params.value
+								+ (params.seriesData.length ? '：' + params.seriesData[0].data : '');
+						}
+					}
+				},
+				data: ["2015-1", "2015-2", "2015-3", "2015-4", "2015-5", "2015-6", "2015-7", "2015-8", "2015-9", "2015-10", "2015-11", "2015-12"]
+			}
+		],
+		yAxis: [
+			{
+				type: 'value',
+				axisLine: {
+					onZero: false,
+					lineStyle: {
+						color: colors[2]
+					}
+				}
+			},
+		],
+		series: [
+			{
+				name:'2015',
+				type:'line',
+				xAxisIndex: 1,
+				smooth: true,
+				data: [112.6, 125.9, 139.0, 126.4, 128.7, 170.7, 175.6, 182.2, 148.7, 118.8, 116.0, 112.3]
+			},
+			{
+				name:'2016',
+				type:'line',
+				smooth: true,
+				data: [113.9, 125.9, 131.1, 118.7, 148.3, 169.2, 231.6, 146.6, 155.4, 118.4, 110.3, 110.7]
+			}
+		]
+	};
+	twelfthChart.setOption(twelfthOption);
 	window.onresize = function () {
 		firstChart.resize();
 		secondChart.resize();
@@ -1484,6 +1605,8 @@ function initCharts() {
 		seventhChart.resize();
 		eighthChart.resize();
 		ninthChart.resize();
+		elevthChart.resize();
+		twelfthChart.resize();
 	}
 }
 
