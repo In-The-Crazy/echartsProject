@@ -12,12 +12,7 @@ package com.huicent.common.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -34,6 +29,112 @@ import com.huicent.travel.util.RedisUtil;
  * @date 2019年1月22日 下午4:14:43
  */
 public class getCtrip {
+	public String getForwardFight(String dcity, String acity, String startDate, String endDate, String weekDays) throws ParseException {
+		Jedis jedis = null;
+		jedis = RedisUtil.getJedis();
+		String[] weekDaysN = weekDays.split(",");
+		Map map = new HashMap();
+		String s = jedis.get(dcity + "-" + acity + startDate);
+		String[] ss = s.split(",");
+		for(int l = 0;l < ss.length;l++){
+			List<String> listKeys = new ArrayList<String>();
+			boolean flag = false;
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			java.util.Date udate = sdf.parse(startDate);
+			long dateLong = udate.getTime();
+			for(int i = 0;i <= 60 ;i++){
+				java.sql.Date sdate = new java.sql.Date(dateLong);
+				String rDate = sdate.toString();
+				if(flag){
+					break;
+				}
+				if(rDate.equals(endDate)){
+					flag = true;
+				}
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(new java.util.Date(dateLong));
+				int weekDay = cal.get(Calendar.DAY_OF_WEEK) - 1;
+				System.out.println(rDate + "=======" + weekDay);
+				boolean weakFlag = true;
+				if(!"".equals(weekDays)){
+					for(int k = 0;k < weekDaysN.length;k++){
+						weakFlag = true;
+						if(weekDay == Integer.parseInt(weekDaysN[k])){
+							weakFlag = false;
+							break;
+						}
+					}
+					if(weakFlag){
+						dateLong = dateLong + 86400000;
+						continue;
+					}
+				}
+
+				String flghtData = rDate + "," + jedis.get(ss[l] + dcity + "-" + acity + rDate);
+				listKeys.add(flghtData);
+				dateLong = dateLong + 86400000;
+			}
+			map.put(ss[l], listKeys);
+
+		}
+
+		JSONObject json = JSONObject.fromObject(map);
+		return json.toString();
+	}
+
+	public String getHistoryFight(String dcity, String acity, String flightDate, String startDate, String endDate) throws ParseException{
+		Jedis jedis = null;
+		jedis = RedisUtil.getJedis();
+		Map map = new HashMap();
+		int min = 6;
+		String s = jedis.get(dcity + "-" + acity + flightDate);
+		String[] ss = s.split(",");
+		for(int l = 0;l < ss.length;l++){
+			List<String> listKeys = new ArrayList<String>();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			java.util.Date udate = sdf.parse(startDate);
+			boolean flag = false;
+			long dateLong = udate.getTime();
+			List<String> listKeys1 = new ArrayList<String>();
+			for(int i = 0;i <= 30 ;i++){
+				java.sql.Date sdate = new java.sql.Date(dateLong);
+				String rDate = sdate.toString();
+				if(flag){
+					break;
+				}
+				if(rDate.equals(endDate)){
+					flag = true;
+				}
+				Set<String> set = jedis.keys(ss[l] + dcity + "-" + acity + flightDate + rDate + "*");
+				List<String> list = new ArrayList<>(set);
+				String[] keys = new String[set.size()];
+				for(int k = 0;k< list.size();k++){
+					keys[k] = list.get(k);
+				}
+				for (int x = 0; x < list.size() - 1; x++) {
+					for (int y = x + 1; y < list.size(); y++) {
+						int xl = Integer.parseInt(keys[x].substring(keys[x].indexOf(" ")+1, keys[x].indexOf(" ")+3) + keys[x].substring(keys[x].indexOf(" ")+4, keys[x].indexOf(" ")+6));
+						int yl = Integer.parseInt(keys[y].substring(keys[y].indexOf(" ")+1, keys[y].indexOf(" ")+3) + keys[y].substring(keys[y].indexOf(" ")+4, keys[y].indexOf(" ")+6));
+						if (xl > yl) {
+							String temp = keys[x];
+							keys[x] = keys[y];
+							keys[y] = temp;
+						}
+					}
+				}
+				for(int k = 0;k< keys.length;k = k + min){
+					String flghtData = jedis.get(keys[k]);
+					flghtData = rDate + " " + keys[k].substring(keys[k].indexOf(" ")+1, keys[k].indexOf(" ")+6) + "," + flghtData;
+					listKeys1.add(flghtData);
+				}
+				dateLong = dateLong + 86400000;
+			}
+			map.put(ss[l], listKeys1);
+		}
+
+		JSONObject json = JSONObject.fromObject(map);
+		return json.toString();
+	}
 
 	/**
 	 *

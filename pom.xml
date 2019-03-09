@@ -20,6 +20,7 @@
 		</repository>
 	</repositories>
 	<dependencies>
+
 		<dependency>
 			<groupId>com.redapplenet</groupId>
 			<artifactId>mid_base</artifactId>
@@ -142,6 +143,11 @@
 		    <groupId>com.sun.jersey</groupId>
 		    <artifactId>jersey-core</artifactId>
 		    <version>1.19.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.rabbitmq</groupId>
+			<artifactId>amqp-client</artifactId>
+			<version>5.6.0</version>
 		</dependency>
 
 	</dependencies>

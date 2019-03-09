@@ -239,8 +239,8 @@ function openWindowWithJson(url, params) {
 // 去空格回车
 function iGetInnerText(testStr) {
 	var resultStr = testStr.replace(/\ +/g, ""); // 去掉空格
-	resultStr = testStr.replace(/[ ]/g, ""); // 去掉空格
-	resultStr = testStr.replace(/[\r\n]/g, ""); // 去掉回车换行
+	resultStr = resultStr.replace(/[ ]/g, ""); // 去掉空格
+	resultStr = resultStr.replace(/[\r\n]/g, ""); // 去掉回车换行
 	return resultStr;
 }
 

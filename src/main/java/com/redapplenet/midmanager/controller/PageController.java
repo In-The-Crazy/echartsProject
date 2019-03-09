@@ -20,5 +20,18 @@ public class PageController {
         return mav;
     }
 
+    @RequestMapping(value = "/queryFlightPriceAnalysisFuture", method = RequestMethod.GET)
+    public ModelAndView queryFlightPriceAnalysisFuture() {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("/flightPriceAnalysisFuture");
+        return mav;
+    }
+    @RequestMapping(value = "/queryFlightPriceAnalysisHistory", method = RequestMethod.GET)
+    public ModelAndView queryFlightPriceAnalysisHistory() {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("/flightPriceAnalysisHistory");
+        return mav;
+    }
+
 
 }
