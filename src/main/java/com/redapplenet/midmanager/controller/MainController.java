@@ -1,6 +1,7 @@
 package com.redapplenet.midmanager.controller;
 
 import com.huicent.common.util.getCtrip;
+import com.huicent.server.util.ChsLogicCmpUtil;
 import com.redapplenet.midmanager.constant.CONST;
 import com.redapplenet.midmanager.util.BaseEntity;
 import net.sf.json.JSONArray;
@@ -67,6 +68,7 @@ public class MainController {
                 e.printStackTrace();
             }
         }
+
         return returnInfo;
     }
 
@@ -120,6 +122,8 @@ public class MainController {
         String returnInfo = null;
         BaseEntity baseEntity = new BaseEntity();
         try {
+            String sort = req.getParameter("sort");
+            String order = req.getParameter("order");
             String fromCity = req.getParameter("fromCity");
             String arriveCity = req.getParameter("arriveCity");
             String takeOffTimeStart = req.getParameter("takeOffTimeStart");
@@ -133,7 +137,7 @@ public class MainController {
             returnInfo = gcp.getForwardFight(fromCity, arriveCity, takeOffTimeStart, takeOffTimeEnd,schedule);
             JSONObject jsonObject = JSONObject.fromObject(returnInfo);
             Iterator<String> it = jsonObject.keys();
-            List list = new ArrayList();
+            List<Map<String,String>> list = new ArrayList();
             List titleList = new ArrayList();
             int count = 0;
             while(it.hasNext()){
@@ -144,12 +148,25 @@ public class MainController {
                 map.put("flightNo",key);
                 if (count==0){
                     titleList.add("flightNo");
-
+                    titleList.add("flightDate");
                 }
+                map.put("flightDate", "");
+                map.put("flightType", "");
                 if(jsonArray.size()>0){
                     for(int i=0;i<jsonArray.size();i++){
                         String job = String.valueOf(jsonArray.get(i));  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
                         String[] jobs = job.split(",");
+
+                        if(jobs.length>=5){
+                            if(!StringUtils.isEmpty(jobs[4]) && !jobs[4].equals("null")) {
+                                map.put("flightDate", jobs[4]);
+                            }
+                        }
+                        if(jobs.length>=6){
+                            if(!StringUtils.isEmpty(jobs[5]) && !jobs[5].equals("null")) {
+                                map.put("flightType", jobs[5]);
+                            }
+                        }
                         if(StringUtils.isEmpty(jobs[1]) || jobs[1].equals("null")){
                             map.put(jobs[0],"");
                         } else {
@@ -171,7 +188,29 @@ public class MainController {
             if(end>list.size()){
                 end = list.size();
             }
-            List<Map<String,Object>> returnList = list.subList(start,end);
+            List<Map<String,String>> returnList = list.subList(start,end);
+            if (!StringUtils.isEmpty(sort)) {
+                String[] sortArray = new String[list.size()];
+                for (int i = 0; i < list.size(); i++) {
+                    sortArray[i] = list.get(i).get(sort).equals("")?"0":list.get(i).get(sort);
+                }
+                char [][] charArrray = ChsLogicCmpUtil.getCharArray(sortArray);
+                Arrays.sort(charArrray,ChsLogicCmpUtil.getOrderType(order));
+                List<Map<String,String>> sortList = new ArrayList();
+                for (int j = 0; j < charArrray.length; j++) {
+                    for (int i = 0; i < list.size(); i++) {
+                        String value = list.get(i).get(sort).equals("")?"0":list.get(i).get(sort);
+                        if(value.equals(new String(charArrray[j])) && !sortList.contains(list.get(i))) {
+                            sortList.add(list.get(i));
+                            break;
+                        }
+
+                    }
+                }
+                returnList = sortList;
+            }
+
+
             baseEntity.setRows(returnList);
             baseEntity.setTotal(list.size());
             baseEntity.setObj(titleList);
@@ -195,6 +234,31 @@ public class MainController {
             String schedule = req.getParameter("schedule");
             getCtrip gcp = new getCtrip();
             returnInfo = gcp.getForwardFight(fromCity, arriveCity, takeOffTimeStart, takeOffTimeEnd,schedule);
+            JSONObject jsonObject = JSONObject.fromObject(returnInfo);
+            Iterator<String> it = jsonObject.keys();
+            List<String> list = new ArrayList<>();
+            while(it.hasNext()){
+                String key = it.next();
+                list.add(key);
+            }
+            String[] sortArray = new String[list.size()];
+            list.toArray(sortArray);
+            char [][] charArrray = ChsLogicCmpUtil.getCharArray(sortArray);
+            Arrays.sort(charArrray,ChsLogicCmpUtil.getOrderType("asc"));
+            List<Map<String,String>> sortList = new ArrayList();
+            JSONObject jsonObjects = new JSONObject();
+
+            for (int j = 0; j < charArrray.length; j++) {
+                Iterator<String> its = jsonObject.keys();
+                while(its.hasNext()){
+                    String key = its.next();
+                    if(key.equals(new String(charArrray[j]))) {
+                        jsonObjects.put(key,jsonObject.getString(key));
+                    }
+                }
+
+            }
+            returnInfo = jsonObjects.toString();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -213,11 +277,163 @@ public class MainController {
             String takeOffTimeEnd = req.getParameter("takeOffTimeEnd");
             String flightDate = req.getParameter("flightDate");
             getCtrip gcp = new getCtrip();
-            returnInfo = gcp.getHistoryFight(fromCity, arriveCity,flightDate, takeOffTimeStart, takeOffTimeEnd);
+            returnInfo = gcp.getHistoryFight(fromCity, arriveCity,flightDate, takeOffTimeStart, takeOffTimeEnd,"30");
+            JSONObject jsonObject = JSONObject.fromObject(returnInfo);
+            Iterator<String> it = jsonObject.keys();
+            List<String> list = new ArrayList<>();
+            while(it.hasNext()){
+                String key = it.next();
+                list.add(key);
+            }
+            String[] sortArray = new String[list.size()];
+            list.toArray(sortArray);
+            char [][] charArrray = ChsLogicCmpUtil.getCharArray(sortArray);
+            Arrays.sort(charArrray,ChsLogicCmpUtil.getOrderType("asc"));
+            List<Map<String,String>> sortList = new ArrayList();
+            JSONObject jsonObjects = new JSONObject();
+
+            for (int j = 0; j < charArrray.length; j++) {
+                Iterator<String> its = jsonObject.keys();
+                while(its.hasNext()){
+                    String key = its.next();
+                    if(key.equals(new String(charArrray[j]))) {
+                        jsonObjects.put(key,jsonObject.getString(key));
+                    }
+                }
+
+            }
+            returnInfo = jsonObjects.toString();
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         return returnInfo;
     }
+
+    @RequestMapping(value = "/flightPriceMaxAndMinHistoryChart", method = RequestMethod.POST)
+    @ResponseBody
+    public LinkedHashMap flightPriceMaxAndMinHistoryChart(HttpServletRequest req) {
+        String returnInfo = "-1";
+        LinkedHashMap linkedHashMap = new LinkedHashMap();
+        try {
+            String fromCity = req.getParameter("fromCity");
+            String arriveCity = req.getParameter("arriveCity");
+            String takeOffTimeStart = req.getParameter("takeOffTimeStart");
+            String takeOffTimeEnd = req.getParameter("takeOffTimeEnd");
+            String flightDate = req.getParameter("flightDate");
+            getCtrip gcp = new getCtrip();
+            returnInfo = gcp.getMaxMinPrice(fromCity, arriveCity,flightDate, takeOffTimeStart, takeOffTimeEnd);
+            JSONObject jsonObject = JSONObject.fromObject(returnInfo);
+            Iterator<String> it = jsonObject.keys();
+            List<String> maxlist = new ArrayList<>();
+
+                String maxvalue = jsonObject.getString("max");
+                JSONObject maxJsonObject = JSONObject.fromObject(maxvalue);
+                Iterator<String> maxfit = maxJsonObject.keys();
+                while(maxfit.hasNext()){
+                    String fkey = maxfit.next();
+                    String fvalue = maxJsonObject.getString(fkey);
+                    JSONArray jsonArray = JSONArray.fromObject(fvalue);
+                    int num =0;
+                    if(jsonArray.size()>0) {
+                        for (int i = 0; i < jsonArray.size(); i++) {
+                            String job = String.valueOf(jsonArray.get(i));  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
+                            String[] jobs = job.split(",");
+                            if (jobs.length >= 3) {
+                                if (!StringUtils.isEmpty(jobs[2]) && !jobs[2].equals("null")) {
+                                    maxlist.add(jobs[2]+"-"+fkey);
+                                    num++;
+                                    break;
+                                }
+
+                            }
+
+                        }
+                    }
+                    if(num==0){
+                        maxlist.add("00:00"+"-"+fkey);
+                    }
+
+                }
+            String[] maxsortArray = new String[maxlist.size()];
+            maxlist.toArray(maxsortArray);
+
+            char [][] maxcharArrray = ChsLogicCmpUtil.getCharArray(maxsortArray);
+            Arrays.sort(maxcharArrray,ChsLogicCmpUtil.getOrderType("asc"));
+            JSONObject maxjsonObject = new JSONObject();
+            LinkedHashMap maxlinkedHashMap = new LinkedHashMap();
+            for (int j = 0; j < maxcharArrray.length; j++) {
+                int index = ChsLogicCmpUtil.printArray(maxcharArrray[j],'-');
+                Iterator<String> its = maxJsonObject.keys();
+                while(its.hasNext()){
+                    String key = its.next();
+                    if(key.equals(new String(maxcharArrray[j]).substring(index+1))) {
+                        maxlinkedHashMap.put(key,maxJsonObject.getString(key));
+                        //maxjsonObject.put(key,maxJsonObject.getString(key));
+                    }
+                }
+
+            }
+            linkedHashMap.put("max",maxlinkedHashMap);
+            //jsonObject.put("max",maxjsonObject);
+            List<String> minlist = new ArrayList<>();
+
+            String minvalue = jsonObject.getString("min");
+            JSONObject minJsonObject = JSONObject.fromObject(minvalue);
+            Iterator<String> minfit = minJsonObject.keys();
+            while(minfit.hasNext()){
+                String fkey = minfit.next();
+                String fvalue = minJsonObject.getString(fkey);
+                JSONArray jsonArray = JSONArray.fromObject(fvalue);
+                int num =0;
+                if(jsonArray.size()>0) {
+
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        String job = String.valueOf(jsonArray.get(i));  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
+                        String[] jobs = job.split(",");
+                        if (jobs.length >= 3) {
+                            if (!StringUtils.isEmpty(jobs[2]) && !jobs[2].equals("null")) {
+                                minlist.add(jobs[2]+"-"+fkey);
+                                num++;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if(num ==0){
+                    minlist.add("00:00"+"-"+fkey);
+                }
+            }
+            String[] minsortArray = new String[minlist.size()];
+            minlist.toArray(minsortArray);
+
+            char [][] mincharArrray = ChsLogicCmpUtil.getCharArray(minsortArray);
+            Arrays.sort(mincharArrray,ChsLogicCmpUtil.getOrderType("asc"));
+            //JSONObject minjsonObject = new JSONObject();
+            LinkedHashMap minlinkedHashMap = new LinkedHashMap();
+
+            for (int j = 0; j < mincharArrray.length; j++) {
+                int index = ChsLogicCmpUtil.printArray(mincharArrray[j],'-');
+                Iterator<String> its = minJsonObject.keys();
+                while(its.hasNext()){
+                    String key = its.next();
+                    if(key.equals(new String(mincharArrray[j]).substring(index+1))) {
+                        minlinkedHashMap.put(key,minJsonObject.getString(key));
+                        //minjsonObject.put(key,minJsonObject.getString(key));
+                    }
+                }
+
+            }
+            linkedHashMap.put("min",minlinkedHashMap);
+
+            //jsonObject.put("min",minjsonObject);
+
+            //returnInfo = jsonObject.toString();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return linkedHashMap;
+    }
+
 }

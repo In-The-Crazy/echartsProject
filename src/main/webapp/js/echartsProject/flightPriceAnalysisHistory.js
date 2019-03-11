@@ -14,17 +14,18 @@ $(function() {
 /** --------初始化页面模块 ------ */
 function initPage() {
 
+
     $("#fromCity").textbox({
-        label : '出发城市：',
-        labelWidth : 100,
+        label : '航段：',
+        labelWidth : 50,
         labelAlign : 'right',
-        width : 250
+        width : 120
     });
     $("#arriveCity").textbox({
-        label : '到达城市：',
-        labelWidth : 100,
+        label : '',
+        labelWidth : 0,
         labelAlign : 'right',
-        width : 250
+        width : 70
     });
 
 
@@ -42,7 +43,7 @@ function initDatebox() {
         label : '采集开始时间：',
         labelWidth : 100,
         labelAlign : 'right',
-        width : 250,
+        width : 230,
         value : daysAgoTemp,
         editable : false,
         required : false
@@ -63,7 +64,7 @@ function initDatebox() {
         label : '采集结束时间：',
         labelWidth : 100,
         labelAlign : 'right',
-        width : 250,
+        width : 230,
         value : today,
         editable : false,
         required : false
@@ -83,7 +84,7 @@ function initDatebox() {
         label : '航班起飞时间：',
         labelWidth : 100,
         labelAlign : 'right',
-        width : 250,
+        width : 230,
         value : today,
         editable : false,
         required : false
@@ -170,6 +171,48 @@ function ajaxTableAndCharts(queryType,flag) {
                             firstSeriesArray.push(showData);
                             num++;
                         }
+/*                        var html='';
+                        for(var i=0;i<firstLegendArray.length;i++){
+                            $('#jzhb').empty();
+
+                            if(i==0){
+                                html+='<fieldset style="width: 200px !important;">';
+                                html+='<label style="width: 120px !important;">基准航班&nbsp;&nbsp;&nbsp;'+firstLegendArray[i]+':</label>';
+                                html+='<input name="jzhb" value="'+firstLegendArray[i]+'" class="easyui-switchbutton" style="margin-top: 10px" checked></fieldset>';
+
+                            } else {
+                                html+='<fieldset style="width: 140px !important;">';
+                                html+='<label style="width: 60px !important;">'+firstLegendArray[i]+':</label>';
+                                html+='<input name="jzhb" value="'+firstLegendArray[i]+'" class="easyui-switchbutton" style="margin-top: 10px" checked></fieldset>';
+
+                            }
+                        }
+                        $('#jzhb').append(html);
+                        $.parser.parse($("#jzhb").parent());
+                        $('#jzhb input').switchbutton({
+                            onChange: function(checked){
+                                var firstSeriesArrayOn =[];
+                                var firstLegendArrayOn =[];
+                                $('#jzhb>fieldset>input[switchbuttonname="jzhb"]').each(function(){
+
+                                    if($(this).prop("checked")){
+                                        for(var i=0;i<firstSeriesArray.length;i++){
+                                            if(firstSeriesArray[i].name==$(this).val()){
+                                                firstLegendArrayOn.push($(this).val());
+                                                firstSeriesArrayOn.push(firstSeriesArray[i]);
+
+                                            }
+                                        }
+                                        //console.log($(this).val())
+                                    }
+
+
+                                });
+                                firstOption.legend.data = firstLegendArrayOn;
+                                firstOption.series = firstSeriesArrayOn;
+                                firstChart.setOption(firstOption,true);
+                            }
+                        })*/
                     }
                 }
             });

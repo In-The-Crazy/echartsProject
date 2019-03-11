@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.redapplenet:mid_base:1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://C:/maven_local_repository/com/redapplenet/mid_base/1.0-SNAPSHOT/mid_base-1.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://C:/maven_local_repository/com/redapplenet/mid_base/1.0-SNAPSHOT/mid_base-1.0-SNAPSHOT-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://C:/maven_local_repository/com/redapplenet/mid_base/1.0-SNAPSHOT/mid_base-1.0-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
