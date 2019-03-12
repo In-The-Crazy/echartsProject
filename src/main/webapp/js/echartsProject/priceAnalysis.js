@@ -314,7 +314,7 @@ function ajaxTree() {
 			"id" : "35",
 			"text" : "35"
 		},{
-			"id" : "4040"
+			"id" : "40"
 		},{
 			"id" : "45",
 			"text" : "45"

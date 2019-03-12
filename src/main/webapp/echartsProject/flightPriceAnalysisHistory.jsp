@@ -43,19 +43,22 @@
         <div class="buttonbar">
             <div align="left">
                 <form id="conditionForm" name="conditionForm">
-                    <fieldset style="width: 230px; !important;">
+                    <fieldset  style="width: 260px;!important;">
+                        <input id="takeOffTimeEnd" name="takeOffTimeEnd" class="easyui-datebox easyui-validatebox" validType="endDate['#takeOffTimeStart']">
+                    </fieldset>
+                    <fieldset style="width: 260px;!important;">
+                        <select id="intervalTime" name="intervalTime" class="easyui-combobox" editable="false">
+                        </select>
+                    </fieldset><br>
+                    <fieldset style="width: 260px; !important;">
                         <input type="text" id="fromCity" name="fromCity" value="TAO"/>
                         -
                         <input type="text" id="arriveCity" name="arriveCity" value="XMN"/>
                     </fieldset>
-                    <fieldset  style="width: 250px;!important;">
+                    <fieldset  style="width: 250px;!important;display: none">
                         <input id="takeOffTimeStart" name="takeOffTimeStart" class="easyui-datebox easyui-validatebox" validType="startDate['#takeOffTimeEnd']">
                     </fieldset>
-                    <fieldset  style="width: 250px;!important;">
-                        <input id="takeOffTimeEnd" name="takeOffTimeEnd" class="easyui-datebox easyui-validatebox" validType="endDate['#takeOffTimeStart']">
-                    </fieldset>
-
-                    <fieldset>
+                    <fieldset style="width: 250px;!important;">
                         <input id="flightDate" name="flightDate">
                     </fieldset>
 

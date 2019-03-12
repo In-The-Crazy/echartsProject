@@ -17,9 +17,9 @@ function initPage() {
 
     $("#fromCity").textbox({
         label : '航段：',
-        labelWidth : 50,
+        labelWidth : 80,
         labelAlign : 'right',
-        width : 120
+        width : 150
     });
     $("#arriveCity").textbox({
         label : '',
@@ -61,8 +61,9 @@ function initDatebox() {
 
 
     $('#takeOffTimeEnd').datebox({
-        label : '采集结束时间：',
-        labelWidth : 100,
+        //label : '采集结束时间：',
+        label : '采集时间：',
+        labelWidth : 80,
         labelAlign : 'right',
         width : 230,
         value : today,
@@ -114,6 +115,33 @@ function initDatebox() {
  * 加载树型
  */
 function ajaxTree() {
+    $('#intervalTime').combobox({
+        label : '采集时间间隔：',
+        labelWidth : 100,
+        labelAlign : "right",
+        data : [/*{
+            "id" : "5",
+            "text" : "5分钟",
+            "selected" : true
+        },*/{
+            "id" : "10",
+            "text" : "10分钟",
+            "selected" : true
+        },{
+            "id" : "30",
+            "text" : "30分钟"
+        },{
+            "id" : "60",
+            "text" : "60分钟"
+        }],
+        valueField : 'id',
+        textField:'text',
+        width : 230,
+        required : true,
+        editable : false,
+        multiple : false,
+        limitToList : true
+    });
 
 }
 
@@ -129,9 +157,10 @@ function ajaxTableAndCharts(queryType,flag) {
     var sendData = {};
     sendData.fromCity=$('#fromCity').val();
     sendData.arriveCity=$('#arriveCity').val();
-    sendData.takeOffTimeStart=$('#takeOffTimeStart').datebox('getValue');
+    sendData.takeOffTimeStart=$('#takeOffTimeEnd').datebox('getValue');//$('#takeOffTimeStart').datebox('getValue');
     sendData.takeOffTimeEnd=$('#takeOffTimeEnd').datebox('getValue');
     sendData.flightDate=$('#flightDate').datebox('getValue');
+    sendData.intervalTime=$('#intervalTime').combobox('getValue');
     var title = "历史航班运价分析"+"("+sendData.fromCity+"-"+sendData.arriveCity+")";
 
     if(queryType==1){
@@ -164,8 +193,8 @@ function ajaxTableAndCharts(queryType,flag) {
                                     firstxArray.push(item[0]);
                                 }
                                 showData.data.push(item[2]);
-                                showData.zws.push(item[0]+'|'+item[3]);
-                                //showData.zws.push(item[0]+'|'+item[3]+'|'+item[4]);
+                                //showData.zws.push(item[0]+'|'+item[3]);
+                                showData.zws.push(item[0]+'|'+item[3]+'|'+item[4]+'|'+item[5]);
 
                             }
                             firstSeriesArray.push(showData);
@@ -241,15 +270,19 @@ function ajaxTableAndCharts(queryType,flag) {
                 trigger: 'item',
                 formatter:function(params){//数据格式
                     var info =params.name+"</br>";
-                    //var flightDate ='';
+                    var flightDate ='';
                     var zws ='';
+                    var flightType='';
+
                     for(var k=0;k<firstSeriesArray.length;k++){
                         if(params.seriesName == firstSeriesArray[k].name){
                             for(var j=0;j<firstSeriesArray[k].zws.length;j++){
                                 var item = firstSeriesArray[k].zws[j].split("|");
                                 if(item[0] == params.name) {
-                                    //flightDate = item[2];
+                                    flightDate = item[2];
                                     zws = item[1];
+                                    flightType =item[3];
+
                                     //info +="&nbsp;&nbsp;座位数："+ item[1];
                                 }
 
@@ -258,7 +291,8 @@ function ajaxTableAndCharts(queryType,flag) {
 
                     }
                     info +="航班号："+params.seriesName+"</br>";
-                    //info +="起飞时间："+flightDate+"" +"</br>";
+                    info +="起飞时间："+flightDate+"" +"</br>";
+                    info +="机型："+flightType+"" +"</br>";
                     info +="价格："+params.value+"</br>";
                     info +="座位数："+ zws+"</br>";
                     info+="</br>";
@@ -295,7 +329,7 @@ function ajaxTableAndCharts(queryType,flag) {
             grid: {
                 left: '15%',
                 right: '4%',
-                bottom: '3%',
+                bottom: '15%',
                 containLabel: true
             },
             toolbox: {
@@ -312,10 +346,12 @@ function ajaxTableAndCharts(queryType,flag) {
             yAxis: {
                 type: 'value',
                 min: function(value) {
-                    return value.min/2;
+                    return value.min-20;
+                    //return value.min/2;
                 },
                 max: function(value) {
-                    return value.max + value.min/2;
+                    return value.max+20;
+                    //return value.max + value.min/2;
                 }
             },
             series: firstSeriesArray

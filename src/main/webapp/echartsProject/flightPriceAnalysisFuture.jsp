@@ -41,21 +41,19 @@
         <div class="buttonbar">
             <div align="left">
                 <form id="conditionForm" name="conditionForm">
-
-                    <fieldset style="width: 230px;!important;">
+                    <fieldset style="width: 400px;!important;margin-left: 10px">
+                        <span id="today" style="font-size: 16px;font-weight: 600"></span>
+                    </fieldset><br>
+                    <fieldset style="width: 225px;!important;">
                         <input type="text" id="fromCity" name="fromCity" value="TAO"/>
                         -
                         <input type="text" id="arriveCity" name="arriveCity" value="XMN"/>
                     </fieldset>
-                    <fieldset  style="width: 290px;!important;">
-                        <input id="takeOffTimeStart" name="takeOffTimeStart">
-                    </fieldset>
-                    <fieldset  style="width: 290px;!important;">
-                        <input id="takeOffTimeEnd" name="takeOffTimeEnd">
-                    </fieldset>
-                    <br>
+                    <fieldset style="width: 250px;!important;">
+                        <input id="takeOffTime" name="takeOffTime"/>
+                    </fieldset><br>
                     <fieldset class="scheduleOne" style="width: 125px;!important;margin-left: 10px">
-                        <input class="easyui-checkbox" name="schedule" value="1" label="班期：星期一" checked>
+                        <input class="easyui-checkbox" name="schedule" value="1" label="班期：星期一">
                     </fieldset>
                     <fieldset class="schedule" style="width: 90px;!important;">
                         <input class="easyui-checkbox" name="schedule" value="2" label="星期二">
@@ -77,6 +75,12 @@
                     </fieldset>
                   <a href="javascript:void(0);" class="easyui-linkbutton" icon="icon-search"
                        onclick="ajaxTableAndCharts(1,true)">查询</a>
+                    <fieldset  style="width: 290px !important;display: none">
+                        <input id="takeOffTimeStart" name="takeOffTimeStart">
+                    </fieldset>
+                    <fieldset  style="width: 290px !important;display: none">
+                        <input id="takeOffTimeEnd" name="takeOffTimeEnd">
+                    </fieldset>
 
                 </form>
             </div>
@@ -89,8 +93,9 @@
 
 
         </div>--%>
-        <div id="firstChart" style="width: 95%;height: 300px;margin-top: 50px;margin-left: 50px;"></div>
-        <div id="secondChart" style="width: 95%;height: 350px;margin-top: 50px;margin-left: 50px;margin-bottom: 50px;"></div>
+        <div id="secondChart" style="width: 95%;height: 350px;margin-top: 50px;margin-left: 50px;"></div>
+
+        <div id="firstChart" style="width: 95%;height: 300px;margin-top: 50px;margin-left: 50px;margin-bottom: 50px;"></div>
 
     </div>
 

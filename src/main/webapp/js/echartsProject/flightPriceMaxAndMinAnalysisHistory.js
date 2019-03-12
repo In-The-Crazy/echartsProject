@@ -17,9 +17,9 @@ function initPage() {
 
     $("#fromCity").textbox({
         label : '航段：',
-        labelWidth : 50,
+        labelWidth : 100,
         labelAlign : 'right',
-        width : 120
+        width : 170
     });
     $("#arriveCity").textbox({
         label : '',
@@ -43,7 +43,7 @@ function initDatebox() {
         label : '采集开始时间：',
         labelWidth : 100,
         labelAlign : 'right',
-        width : 230,
+        width : 250,
         value : daysAgoTemp,
         editable : false,
         required : false
@@ -64,7 +64,7 @@ function initDatebox() {
         label : '采集结束时间：',
         labelWidth : 100,
         labelAlign : 'right',
-        width : 230,
+        width : 250,
         value : today,
         editable : false,
         required : false
@@ -84,7 +84,7 @@ function initDatebox() {
         label : '航班起飞时间：',
         labelWidth : 100,
         labelAlign : 'right',
-        width : 230,
+        width : 250,
         value : today,
         editable : false,
         required : false
@@ -128,6 +128,8 @@ function ajaxTableAndCharts(queryType,flag) {
     var thirdOption;
     var start =0;
     var end =100;
+    var date = getAll($('#takeOffTimeStart').datebox('getValue'),$('#takeOffTimeEnd').datebox('getValue'),"1,2,3,4,5,6,0");
+
     var sendData = {};
     sendData.fromCity=$('#fromCity').val();
     sendData.arriveCity=$('#arriveCity').val();
@@ -259,7 +261,7 @@ function ajaxTableAndCharts(queryType,flag) {
                                     showData.barGap=0;
                                     showData.data = [];
                                     showData.zws = [];
-                                    showData.label =labelOption;
+                                    //showData.label =labelOption;
                                     showData.barMaxWidth = 50;
                                     showData.barMinWidth = 50;
                                     for (var i = 0; i < dataList.length; i++) {
@@ -289,7 +291,7 @@ function ajaxTableAndCharts(queryType,flag) {
                                     showData.barMaxWidth = 50;
                                     showData.barMinWidth = 50;
 
-                                    showData.label =labelOption;
+                                    //showData.label =labelOption;
                                     for (var i = 0; i < dataList.length; i++) {
                                         var item = dataList[i].split(",");
                                         if(num2==0){
@@ -343,8 +345,13 @@ function ajaxTableAndCharts(queryType,flag) {
                         $('#jzhb input').checkbox({
                             onChange: function(checked){
                                 $(this).parent('fieldset').siblings().find('input[name="xzhb"]').prop("checked",false);
+
                                 //console.log($(this).parent('fieldset').siblings().find('input[checkboxname="xzhb"]').length);
+                                $(this).parent('fieldset').siblings().find('span.checkbox-inner').removeClass('checkbox-checked');
                                 $(this).parent('fieldset').siblings().find('span.checkbox-inner').hide();
+                                $(this).parent('fieldset').find('span.checkbox-inner').addClass('checkbox-checked');
+                                $(this).parent('fieldset').find('span.checkbox-inner').show();
+
                                 thirdSeriesArray = [];
 
                                         for(var i=0;i<firstSeriesArray.length;i++){
@@ -372,6 +379,10 @@ function ajaxTableAndCharts(queryType,flag) {
                     }
                 }
             });
+        }
+        if(date.length*firstLegendArray.length>20){
+            start =0;
+            end = parseInt(20/(date.length*firstLegendArray.length)*100);
         }
         firstOption = {
             dataZoom : [
@@ -429,7 +440,7 @@ function ajaxTableAndCharts(queryType,flag) {
             grid: {
                 left: '15%',
                 right: '4%',
-                bottom: '10%',
+                bottom: '18%',
                 containLabel: true
             },
             toolbox: {
@@ -457,6 +468,10 @@ function ajaxTableAndCharts(queryType,flag) {
             ],
             series: firstSeriesArray
         };
+        if(date.length*secondLegendArray.length>20){
+            start =0;
+            end = parseInt(20/(date.length*secondLegendArray.length)*100);
+        }
         secondOption = {
             dataZoom : [
                 {
@@ -513,7 +528,7 @@ function ajaxTableAndCharts(queryType,flag) {
             grid: {
                 left: '15%',
                 right: '4%',
-                bottom: '10%',
+                bottom: '18%',
                 containLabel: true
             },
             toolbox: {
@@ -541,6 +556,13 @@ function ajaxTableAndCharts(queryType,flag) {
             ],
             series: secondSeriesArray
         };
+        if(date.length*thirdLegendArray.length>20){
+            start =0;
+            end = parseInt(20/(date.length*thirdLegendArray.length)*100);
+        } else {
+            start =0;
+            end =100;
+        }
         thirdOption = {
             dataZoom : [
                 {
@@ -599,7 +621,7 @@ function ajaxTableAndCharts(queryType,flag) {
             grid: {
                 left: '15%',
                 right: '4%',
-                bottom: '10%',
+                bottom: '18%',
                 containLabel: true
             },
             toolbox: {

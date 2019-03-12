@@ -124,6 +124,10 @@ public class MainController {
         try {
             String sort = req.getParameter("sort");
             String order = req.getParameter("order");
+            if(StringUtils.isEmpty(sort) && StringUtils.isEmpty(order)){
+                sort ="flightDate";
+                order = "asc";
+            }
             String fromCity = req.getParameter("fromCity");
             String arriveCity = req.getParameter("arriveCity");
             String takeOffTimeStart = req.getParameter("takeOffTimeStart");
@@ -276,8 +280,9 @@ public class MainController {
             String takeOffTimeStart = req.getParameter("takeOffTimeStart");
             String takeOffTimeEnd = req.getParameter("takeOffTimeEnd");
             String flightDate = req.getParameter("flightDate");
+            String intervalTime = req.getParameter("intervalTime");
             getCtrip gcp = new getCtrip();
-            returnInfo = gcp.getHistoryFight(fromCity, arriveCity,flightDate, takeOffTimeStart, takeOffTimeEnd,"30");
+            returnInfo = gcp.getHistoryFight(fromCity, arriveCity,flightDate, takeOffTimeStart, takeOffTimeEnd,intervalTime);
             JSONObject jsonObject = JSONObject.fromObject(returnInfo);
             Iterator<String> it = jsonObject.keys();
             List<String> list = new ArrayList<>();
@@ -337,15 +342,17 @@ public class MainController {
                     int num =0;
                     if(jsonArray.size()>0) {
                         for (int i = 0; i < jsonArray.size(); i++) {
-                            String job = String.valueOf(jsonArray.get(i));  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
-                            String[] jobs = job.split(",");
-                            if (jobs.length >= 3) {
-                                if (!StringUtils.isEmpty(jobs[2]) && !jobs[2].equals("null")) {
-                                    maxlist.add(jobs[2]+"-"+fkey);
-                                    num++;
-                                    break;
-                                }
+                            if(i ==jsonArray.size()-1) {
+                                String job = String.valueOf(jsonArray.get(i));  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
+                                String[] jobs = job.split(",");
+                                if (jobs.length >= 3) {
+                                    if (!StringUtils.isEmpty(jobs[2]) && !jobs[2].equals("null")) {
+                                        maxlist.add(jobs[2] + "-" + fkey);
+                                        num++;
+                                        break;
+                                    }
 
+                                }
                             }
 
                         }
@@ -389,13 +396,15 @@ public class MainController {
                 if(jsonArray.size()>0) {
 
                     for (int i = 0; i < jsonArray.size(); i++) {
-                        String job = String.valueOf(jsonArray.get(i));  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
-                        String[] jobs = job.split(",");
-                        if (jobs.length >= 3) {
-                            if (!StringUtils.isEmpty(jobs[2]) && !jobs[2].equals("null")) {
-                                minlist.add(jobs[2]+"-"+fkey);
-                                num++;
-                                break;
+                        if(i ==jsonArray.size()-1) {
+                            String job = String.valueOf(jsonArray.get(i));  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
+                            String[] jobs = job.split(",");
+                            if (jobs.length >= 3) {
+                                if (!StringUtils.isEmpty(jobs[2]) && !jobs[2].equals("null")) {
+                                    minlist.add(jobs[2] + "-" + fkey);
+                                    num++;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -434,6 +443,154 @@ public class MainController {
         }
 
         return linkedHashMap;
+    }
+
+    @RequestMapping(value = "/flightPriceCurrentDateChart", method = RequestMethod.POST)
+    @ResponseBody
+    public String flightPriceCurrentDateChart(HttpServletRequest req) {
+        String returnInfo = "-1";
+        String fromCity = req.getParameter("fromCity");
+        String arriveCity = req.getParameter("arriveCity");
+        String takeOffTime = req.getParameter("takeOffTime");
+        String intervalTime = req.getParameter("intervalTime");
+        getCtrip gcp = new getCtrip();
+        returnInfo = gcp.getFight(fromCity, arriveCity, takeOffTime, intervalTime);
+        JSONObject jsonObject = JSONObject.fromObject(returnInfo);
+        Iterator<String> it = jsonObject.keys();
+        List<String> list = new ArrayList<>();
+        while(it.hasNext()){
+            String key = it.next();
+            list.add(key);
+        }
+        String[] sortArray = new String[list.size()];
+        list.toArray(sortArray);
+        char [][] charArrray = ChsLogicCmpUtil.getCharArray(sortArray);
+        Arrays.sort(charArrray,ChsLogicCmpUtil.getOrderType("asc"));
+        List<Map<String,String>> sortList = new ArrayList();
+        JSONObject jsonObjects = new JSONObject();
+
+        for (int j = 0; j < charArrray.length; j++) {
+            Iterator<String> its = jsonObject.keys();
+            while(its.hasNext()){
+                String key = its.next();
+                if(key.equals(new String(charArrray[j]))) {
+                    jsonObjects.put(key,jsonObject.getString(key));
+                }
+            }
+
+        }
+        returnInfo = jsonObjects.toString();
+
+        return returnInfo;
+    }
+
+    @RequestMapping(value = "/flightPriceAnalysisCurrentDate", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseEntity flightPriceAnalysisCurrentDate(HttpServletRequest req) {
+        String returnInfo = null;
+        BaseEntity baseEntity = new BaseEntity();
+        try {
+            String sort = req.getParameter("sort");
+            String order = req.getParameter("order");
+            if(StringUtils.isEmpty(sort) && StringUtils.isEmpty(order)){
+                sort ="flightDate";
+                order = "asc";
+            }
+            String fromCity = req.getParameter("fromCity");
+            String arriveCity = req.getParameter("arriveCity");
+            String takeOffTime = req.getParameter("takeOffTime");
+            String intervalTime = req.getParameter("intervalTime");
+            int page = Integer.valueOf(req.getParameter("page"));
+            int rows = Integer.valueOf(req.getParameter("rows"));
+            int start = (page - 1) * rows;
+            int end = (page - 1) * rows + rows;
+            getCtrip gcp = new getCtrip();
+            returnInfo = gcp.getFight(fromCity, arriveCity, takeOffTime, intervalTime);
+            JSONObject jsonObject = JSONObject.fromObject(returnInfo);
+            Iterator<String> it = jsonObject.keys();
+            List<Map<String,String>> list = new ArrayList();
+            List titleList = new ArrayList();
+            int count = 0;
+            while(it.hasNext()){
+                Map map = new HashMap();
+                String key = it.next();
+                String value = jsonObject.getString(key);
+                JSONArray jsonArray = JSONArray.fromObject(value);
+                map.put("flightNo",key);
+//                if (count==0){
+//                    titleList.add("flightNo");
+//                    titleList.add("flightDate");
+//                }
+                map.put("flightDate", "");
+                map.put("flightType", "");
+                if(jsonArray.size()>0){
+                    for(int i=0;i<jsonArray.size();i++){
+                        String job = String.valueOf(jsonArray.get(i));  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
+                        String[] jobs = job.split(",");
+
+                        if(jobs.length>=5){
+                            if(!StringUtils.isEmpty(jobs[4]) && !jobs[4].equals("null")) {
+                                map.put("flightDate", jobs[4]);
+                            }
+                        }
+                        if(jobs.length>=6){
+                            if(!StringUtils.isEmpty(jobs[5]) && !jobs[5].equals("null")) {
+                                map.put("flightType", jobs[5]);
+                            }
+                        }
+                        if(StringUtils.isEmpty(jobs[1]) || jobs[1].equals("null")){
+                            map.put(jobs[0].replace(":","："),"");
+                        } else {
+                            map.put(jobs[0].replace(":","："),jobs[2]);
+                        }
+                        //System.out.println(String.valueOf(job)) ;  // 得到 每个对象中的属性值
+                        if (count==0) {
+                            titleList.add(jobs[0].replace(":","："));
+                        }
+
+
+                    }
+                }
+                list.add(map);
+                //System.out.println("key: "+key+",value:"+value);
+                count++;
+
+            }
+            if(end>list.size()){
+                end = list.size();
+            }
+            List<Map<String,String>> returnList = list.subList(start,end);
+            if (!StringUtils.isEmpty(sort)) {
+                String[] sortArray = new String[list.size()];
+                for (int i = 0; i < list.size(); i++) {
+                    sortArray[i] = list.get(i).get(sort).equals("")?"0":list.get(i).get(sort);
+                }
+                char [][] charArrray = ChsLogicCmpUtil.getCharArray(sortArray);
+                Arrays.sort(charArrray,ChsLogicCmpUtil.getOrderType(order));
+                List<Map<String,String>> sortList = new ArrayList();
+                for (int j = 0; j < charArrray.length; j++) {
+                    for (int i = 0; i < list.size(); i++) {
+                        String value = list.get(i).get(sort).equals("")?"0":list.get(i).get(sort);
+                        if(value.equals(new String(charArrray[j])) && !sortList.contains(list.get(i))) {
+                            sortList.add(list.get(i));
+                            break;
+                        }
+
+                    }
+                }
+                returnList = sortList;
+            }
+
+
+            baseEntity.setRows(returnList);
+            baseEntity.setTotal(list.size());
+            baseEntity.setObj(titleList);
+        } catch (Exception e) {
+            baseEntity.setIsSuccessOrfail(CONST.FAIL);
+            baseEntity.setMessage(e.getMessage());
+            e.printStackTrace();
+        }
+        return baseEntity;
     }
 
 }

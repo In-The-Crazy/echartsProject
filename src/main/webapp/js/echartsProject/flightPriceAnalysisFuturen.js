@@ -26,16 +26,24 @@ function initPage() {
         labelAlign : 'right',
         width : 70
     });
-
+    var today = new Date();
+    today = today.pattern("yyyy-MM-dd");
+    var weeks=['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+    var day = new Date(today).getDay();
+    $('#today').html("采样时间："+today+'&nbsp;&nbsp;'+weeks[day]+"（不含今日）");
 
 }
 
 /** --------加载日历选择 ------ */
 function initDatebox() {
     var today = new Date();
-    today = today.pattern("yyyy-MM-dd");
+    //today = today.pattern("yyyy-MM-dd");
+    var todayAgo = new Date(today.getTime()+24*60*60*1000)
+    var todayAgoTemp = todayAgo.pattern("yyyy-MM-dd");
+
+
     var todayTwo = new Date();
-    var daysAgo = new Date(todayTwo.getTime()+60*24*60*60*1000);
+    var daysAgo = new Date(todayAgo.getTime()+60*24*60*60*1000);
     var daysAgoTemp = daysAgo.pattern("yyyy-MM-dd");
 
     $('#takeOffTimeStart').datebox({
@@ -43,16 +51,20 @@ function initDatebox() {
         labelWidth : 140,
         labelAlign : 'right',
         width : 270,
-        value : today,
+        value : todayAgoTemp,
         editable : false,
         required : false
     });
 
     $('#takeOffTimeStart').datebox().datebox('calendar').calendar({
         validator: function(date){
-            var now = new Date();
+/*            var now = new Date();
             var d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             var temp = new Date(now.getTime()+60*24*60*60*1000);
+            var d2 = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
+            return d2>=date && date>=d1;*/
+            var d1 = new Date(todayAgo.getFullYear(), todayAgo.getMonth(), todayAgo.getDate());
+            var temp = new Date(todayAgo.getTime()+60*24*60*60*1000);
             var d2 = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
             return d2>=date && date>=d1;
         }
@@ -89,6 +101,32 @@ function initDatebox() {
  * 加载树型
  */
 function ajaxTree() {
+    $('#takeOffTime').combobox({
+        label : '航班起飞时间范围：',
+        labelWidth : 120,
+        labelAlign : "right",
+        data : [{
+            "id" : "3",
+            "text" : "3天以内",
+            "selected" : true
+        },{
+            "id" : "14",
+            "text" : "14天以内"
+        },{
+            "id" : "30",
+            "text" : "30天以内"
+        }/*,{
+            "id" : "60",
+            "text" : "60天以内"
+        }*/],
+        valueField : 'id',
+        textField:'text',
+        width : 230,
+        required : false,
+        editable : false,
+        multiple : false,
+        limitToList : false
+    });
     $('#schedule').combobox({
         label : 'D',
         labelWidth : 100,
@@ -135,7 +173,13 @@ function ajaxTableAndCharts(queryType,flag) {
         checkID[i] =$(this).val();
     });
     var schedule = checkID.join(',');
-    var date = getAll($('#takeOffTimeStart').datebox('getValue'),$('#takeOffTimeEnd').datebox('getValue'),schedule);
+    if(schedule ==''){
+        schedule ="1,2,3,4,5,6,0";
+    }
+    var date = getAll($('#takeOffTimeStart').datebox('getValue'),$('#takeOffTimeEnd').datebox('getValue'),"1,2,3,4,5,6,0");
+    var end = Number($('#takeOffTime').combobox('getValue'));
+    date = date.slice(0,end);
+    date = getAll(date[0].split('|')[0],date[date.length-1].split('|')[0],schedule);
 
     var firstChart = echarts.init(document.getElementById('firstChart'),'roma');
     var secondChart = echarts.init(document.getElementById('secondChart'),'roma');
@@ -146,8 +190,8 @@ function ajaxTableAndCharts(queryType,flag) {
     var sendData = {};
     sendData.fromCity=$('#fromCity').val();
     sendData.arriveCity=$('#arriveCity').val();
-    sendData.takeOffTimeStart=$('#takeOffTimeStart').datebox('getValue');
-    sendData.takeOffTimeEnd=$('#takeOffTimeEnd').datebox('getValue');
+    sendData.takeOffTimeStart=date[0].split('|')[0];
+    sendData.takeOffTimeEnd=date[date.length-1].split('|')[0];
     sendData.schedule=schedule;
     var title = "远期航班运价分析"+"("+sendData.fromCity+"-"+sendData.arriveCity+")";
     //var params = {"fromCity":"TAO","arriveCity":"XMN","takeOffTime":"2019-03-07","intervalTime":"60"};
@@ -181,10 +225,10 @@ function ajaxTableAndCharts(queryType,flag) {
     column.push(columnObj2);
     var columnObj3 = {};
     columnObj3.field="flightType";
-    columnObj3.title="客机名称";
+    columnObj3.title="机型";
     columnObj3.align="center";
     columnObj3.formatter=baseFormater;
-    columnObj3.width=100;
+    columnObj3.width=150;
     columnObj3.sortable=true;
     column.push(columnObj3);
     for(var i=0;i<date.length;i++){
@@ -194,14 +238,14 @@ function ajaxTableAndCharts(queryType,flag) {
         columnObj.title=dates[0]+'('+weeks[dates[1]]+')';
         columnObj.align="center";
         columnObj.formatter=baseFormater;
-        columnObj.width=120;
+        columnObj.width=160;
         columnObj.sortable=true;
         column.push(columnObj);
     }
 
     columns.push(column);
     var fitColumns = true;
-    if(column.length>10){
+    if(column.length>9){
         fitColumns = false;
     }
     $('#queryTable').datagrid({
@@ -365,7 +409,7 @@ function ajaxTableAndCharts(queryType,flag) {
                             showDataTwo.name = key;
                             showDataTwo.type = 'bar';
                             showDataTwo.barGap=0;
-                            showDataTwo.label =labelOption;
+                            //showDataTwo.label =labelOption;
                             showDataTwo.data = [];
                             showDataTwo.zws = [];
                             showDataTwo.barMaxWidth = 50;
@@ -379,9 +423,9 @@ function ajaxTableAndCharts(queryType,flag) {
                                     secondxArray.push(item[0]);
                                 }
                                 showData.data.push(item[2]);
-                                showData.zws.push(item[0]+'|'+item[3]+'|'+item[4]);
+                                showData.zws.push(item[0]+'|'+item[3]+'|'+item[4]+'|'+item[5]);
                                 showDataTwo.data.push(item[2]);
-                                showDataTwo.zws.push(item[0]+'|'+item[3]+'|'+item[4])
+                                showDataTwo.zws.push(item[0]+'|'+item[3]+'|'+item[4]+'|'+item[5])
                             }
                             firstSeriesArray.push(showData);
                             secondSeriesArray.push(showDataTwo);
@@ -469,6 +513,7 @@ function ajaxTableAndCharts(queryType,flag) {
                     var info =params.name+"</br>";
                     var flightDate ='';
                     var zws ='';
+                    var flightType='';
                     for(var k=0;k<firstSeriesArray.length;k++){
                         if(params.seriesName == firstSeriesArray[k].name){
                             for(var j=0;j<firstSeriesArray[k].zws.length;j++){
@@ -476,6 +521,7 @@ function ajaxTableAndCharts(queryType,flag) {
                                 if(item[0] == params.name) {
                                     flightDate = item[2];
                                     zws = item[1];
+                                    flightType =item[3];
                                     //info +="&nbsp;&nbsp;座位数："+ item[1];
                                 }
 
@@ -485,6 +531,7 @@ function ajaxTableAndCharts(queryType,flag) {
                     }
                     info +="航班号："+params.seriesName+"</br>";
                     info +="起飞时间："+flightDate+"" +"</br>";
+                    info +="机型："+flightType+"" +"</br>";
                     info +="价格："+params.value+"</br>";
                     info +="座位数："+ zws+"</br>";
                     info+="</br>";
@@ -521,7 +568,7 @@ function ajaxTableAndCharts(queryType,flag) {
             grid: {
                 left: '15%',
                 right: '4%',
-                bottom: '3%',
+                bottom: '15%',
                 containLabel: true
             },
             toolbox: {
@@ -538,15 +585,20 @@ function ajaxTableAndCharts(queryType,flag) {
             yAxis: {
                 type: 'value',
                 min: function(value) {
-                    return value.min/2;
+                    //return value.min/2;
+                    return value.min-20;
                 },
                 max: function(value) {
-                    return value.max + value.min/2;
+                    return value.max + 20;
+                    //return value.max + value.min/2;
                 }
             },
             series: firstSeriesArray
         };
-
+        if((column.length-4)*secondLegendArray.length>20) {
+            start = 0;
+            end = parseInt(20/((column.length-4)*secondLegendArray.length)*100);
+        }
         secondOption = {
             dataZoom : [
                 {
@@ -573,6 +625,8 @@ function ajaxTableAndCharts(queryType,flag) {
                     var info =params.name+"</br>";
                     var flightDate ='';
                     var zws ='';
+                    var flightType='';
+
                     for(var k=0;k<firstSeriesArray.length;k++){
                         if(params.seriesName == firstSeriesArray[k].name){
                             for(var j=0;j<firstSeriesArray[k].zws.length;j++){
@@ -580,6 +634,8 @@ function ajaxTableAndCharts(queryType,flag) {
                                 if(item[0] == params.name) {
                                     flightDate = item[2];
                                     zws = item[1];
+                                    flightType =item[3];
+
                                     //info +="&nbsp;&nbsp;座位数："+ item[1];
                                 }
 
@@ -589,6 +645,7 @@ function ajaxTableAndCharts(queryType,flag) {
                     }
                     info +="航班号："+params.seriesName+"</br>";
                     info +="起飞时间："+flightDate+"" +"</br>";
+                    info +="机型："+flightType+"" +"</br>";
                     info +="价格："+params.value+"</br>";
                     info +="座位数："+ zws+"</br>";
                     info+="</br>";
@@ -625,7 +682,7 @@ function ajaxTableAndCharts(queryType,flag) {
             grid: {
                 left: '15%',
                 right: '4%',
-                bottom: '10%',
+                bottom: '15%',
                 containLabel: true
             },
             toolbox: {

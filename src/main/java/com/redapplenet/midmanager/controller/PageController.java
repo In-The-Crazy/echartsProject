@@ -38,5 +38,11 @@ public class PageController {
         mav.setViewName("/flightPriceMaxAndMinAnalysisHistory");
         return mav;
     }
+    @RequestMapping(value = "/queryFilghtPriceAnalysisCuttentDate", method = RequestMethod.GET)
+    public ModelAndView queryFilghtPriceAnalysisCuttentDate() {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("/filghtPriceAnalysisCuttentDate");
+        return mav;
+    }
 
 }
